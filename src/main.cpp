@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 23:37:52 by padam             #+#    #+#             */
-/*   Updated: 2024/10/17 00:00:09 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/17 00:44:16 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,14 @@ int	main(int argc, char **argv)
 	{
 		std::cout << "Port out of range" << std::endl;
 	}
-	if (port <= PRIVILEGED_PORTS || port > MAX_PORTS - 1)
+	if (port <= PRIVILEGED_PORTS || port >= PRIVATE_PORTS)
 	{
 		if (port < 0)
 			std::cout << "Port has to be positive" << std::endl;
 		else if (port <= PRIVILEGED_PORTS)
 			std::cout << "Ports below " << PRIVILEGED_PORTS + 1 << " are privileged" << std::endl;
+		else if (port > PRIVATE_PORTS)
+			std::cout << "Ports above " << PRIVATE_PORTS - 1 << " are privat" << std::endl;
 		else if (port > MAX_PORTS)
 			std::cout << "Port has to be lower than " << MAX_PORTS - 1 << std::endl;
 		return (1);

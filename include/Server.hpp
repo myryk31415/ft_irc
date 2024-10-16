@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:38:31 by padam             #+#    #+#             */
-/*   Updated: 2024/10/16 23:46:43 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/17 01:10:29 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,7 @@ class Server
 		static void	signal_handler(int signal);
 
 		void		init();
-		void		create_socket();
+		void		setup_server_socket();
+		void		shutdown_server();
+		void		poll();
 };
