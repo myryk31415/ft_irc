@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: padam <padam@student.42heilbronn.com>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/16 15:38:40 by padam             #+#    #+#             */
-/*   Updated: 2024/10/16 16:15:13 by padam            ###   ########.fr       */
+/*   Created: 2024/10/16 16:15:57 by padam             #+#    #+#             */
+/*   Updated: 2024/10/16 16:16:57 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Server.hpp"
+#include "Channel.hpp"
 
-Server::Server()
+Channel::Channel()
 {
 }
 
-Server::~Server()
+Channel::~Channel()
 {
 }
