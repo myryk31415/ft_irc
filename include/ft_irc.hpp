@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:38:34 by padam             #+#    #+#             */
-/*   Updated: 2024/10/16 20:47:09 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/16 23:19:23 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include <iostream>
 
+#define RESET "\e[0;37m"
 #define RED "\e[1;31m"
-#define WHITE "\e[0;37m"
 #define GREEN "\e[1;32m"
 #define YELLOE "\e[1;33m"
