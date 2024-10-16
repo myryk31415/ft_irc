@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:38:40 by padam             #+#    #+#             */
-/*   Updated: 2024/10/16 23:20:27 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/16 23:35:33 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	Server::init()
 	int value = 1;
 	if (setsockopt(_server_socket_fd, SOL_SOCKET, SO_REUSEADDR, &value, sizeof(value)) == -1)
 		throw(std::runtime_error("setting socket option `REUSEADDR` failed"));
-	if (fcntl(_server_socket_fd, F_SETFL, O_NONBLOCK) == -1)
+	if (fcntl(_server_socket_fd, F_SETFL, O_NONBLOCK) == -1) // make fd nonblocking for MacOS
 		throw(std::runtime_error("setting socket to `NONBLOCK` failed"));
 	if (listen(_server_socket_fd, SOMAXCONN) == -1) // wait for connections
 		throw(std::runtime_error("socket listening failed"));

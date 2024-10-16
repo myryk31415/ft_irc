@@ -6,14 +6,14 @@
 #    By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/10/11 01:16:10 by padam            ###   ########.fr        #
+#    Updated: 2024/10/16 23:46:23 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ft_irc
+NAME = ircserv
 
 CC = c++
-CFLAGS =  $(INCLUDES) -Wall -Wextra -Werror -std=c++98
+CFLAGS =  $(INCLUDES) #-Wall -Wextra -Werror -std=c++17
 INCLUDES = -I./include
 LIBS =
 
@@ -22,7 +22,7 @@ OBJ_PATH = obj
 
 OBJ_DIRS =
 
-SRCS_MAIN =	test_irc.cpp
+SRCS_MAIN =	main.cpp Server.cpp Client.cpp Channel.cpp
 
 SRC_NAME =										$(SRCS_MAIN)	\
 #			$(addprefix ,							$())		\

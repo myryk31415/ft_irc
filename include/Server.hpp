@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:38:31 by padam             #+#    #+#             */
-/*   Updated: 2024/10/16 23:17:20 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/16 23:46:43 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,6 @@
 #include "ft_irc.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
-
-struct sockaddr_in {
-    sa_family_t    sin_family; /* address family: AF_INET */
-    in_port_t      sin_port;   /* port in network byte order */
-    struct in_addr sin_addr;   /* internet address */
-};
 
 class Server
 {
