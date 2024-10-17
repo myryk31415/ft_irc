@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:38:31 by padam             #+#    #+#             */
-/*   Updated: 2024/10/17 01:10:29 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/17 10:20:42 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 class Server
 {
 	private:
-		static bool _Signal;
+		static bool _signal;
 		int _port;
 		int _server_socket_fd;
 		std::vector<struct pollfd> _sockets;
@@ -40,6 +40,8 @@ class Server
 
 		void		init();
 		void		setup_server_socket();
-		void		shutdown_server();
+		void		shutdown();
 		void		poll();
+		void		accept_client();
+		void		receive_data();
 };

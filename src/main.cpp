@@ -6,17 +6,13 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 23:37:52 by padam             #+#    #+#             */
-/*   Updated: 2024/10/17 00:44:16 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/17 10:33:02 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <string>
 #include "ft_irc.hpp"
-
-void	usage()
-{
-	std::cout << "usage: ./ircserv <port> <password>" << std::endl;
-}
+#include "Server.hpp"
 
 int	main(int argc, char **argv)
 {
@@ -24,7 +20,10 @@ int	main(int argc, char **argv)
 	int	port;
 
 	if (argc != 3)
-		return (usage(), 1);
+	{
+		std::cout << "usage: ./ircserv <port> <password>" << std::endl;
+		return (1);
+	}
 	try
 	{
 		port = std::stoi(argv[1]);
@@ -47,4 +46,8 @@ int	main(int argc, char **argv)
 	}
 	std::cout << port << std::endl;
 	pass = std::string(argv[2]);
+
+	Server server(port);
+	server.init();
+	server.poll();
 }

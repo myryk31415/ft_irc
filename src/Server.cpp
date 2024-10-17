@@ -6,11 +6,13 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:38:40 by padam             #+#    #+#             */
-/*   Updated: 2024/10/17 01:31:04 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/17 10:34:33 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+
+bool Server::_signal = false;
 
 Server::Server(int port) : _port(port) {}
 
@@ -19,6 +21,7 @@ Server::~Server() {}
 void	Server::signal_handler(int signal)
 {
 	std::cout << std::endl << "Signal " << signal << " received!" << std::endl;
+	_signal = true;
 }
 
 /**
@@ -28,22 +31,23 @@ void	Server::signal_handler(int signal)
 void	Server::init()
 {
 	try {
-		if (signal(SIGINT, signal_handler) == SIG_ERR) // "ctrl + c"
-			throw(std::runtime_error("setting signal handler failed"));
-		if (signal(SIGQUIT, signal_handler) == SIG_ERR); // "ctrl + \"
-			throw(std::runtime_error("setting signal handler failed"));
+		signal(SIGINT, signal_handler);
+		signal(SIGQUIT, signal_handler);
+		// if (signal(SIGINT, signal_handler) == SIG_ERR) // "ctrl + c"
+		// 	throw(std::runtime_error("setting signal handler failed"));
+		// if (signal(SIGQUIT, signal_handler) == SIG_ERR); // "ctrl + \"
+		// 	throw(std::runtime_error("setting signal handler failed"));
 
 		setup_server_socket();
+		std::cout << GREEN << "Server " << _server_socket_fd << " started" << RESET << std::endl;
+		std::cout << "Waiting for connections" << std::endl;
 	}
 	catch (std::exception &e)
 	{
 		std::cout << RED << "Error while initializing server:" << std::endl;
 		std::cout << e.what() << RESET << std::endl;
-		shutdown_server();
+		shutdown();
 	}
-
-	std::cout << GREEN << "Server " << _server_socket_fd << " started" << RESET << std::endl;
-	std::cout << "Waiting for connections" << std::endl;
 }
 
 void	Server::setup_server_socket()
@@ -73,7 +77,7 @@ void	Server::setup_server_socket()
 	_sockets.push_back(new_poll);
 }
 
-void	Server::shutdown_server()
+void	Server::shutdown()
 {
 	std::cout << RED;
 	for(auto iter = _clients.begin(); iter != _clients.end(); iter++)
@@ -83,13 +87,38 @@ void	Server::shutdown_server()
 	}
 	if (_server_socket_fd != -1)
 	{
-		std::cout << "Disconnection server " << _server_socket_fd << std::endl;
+		std::cout << "Shutting down server " << _server_socket_fd << std::endl;
 		close(_server_socket_fd);
 	}
 	std::cout << RESET;
 }
 
 void	Server::poll()
+{
+	while (_signal == false)
+	{
+		if (::poll(&_sockets[0], _sockets.size(), -1) == -1 && !_signal)
+			throw(std::runtime_error("polling failed"));
+		for (auto iter = _sockets.begin(); iter != _sockets.end(); iter++)
+		{
+			if ((*iter).revents & POLLIN)
+			{
+				if ((*iter).fd == _server_socket_fd)
+					accept_client();
+				else
+					receive_data();
+			}
+		}
+	}
+	shutdown();
+}
+
+void	Server::accept_client()
+{
+
+}
+
+void	Server::receive_data()
 {
 
 }
