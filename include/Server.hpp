@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:38:31 by padam             #+#    #+#             */
-/*   Updated: 2024/10/17 10:20:42 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/17 11:02:45 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
+#include <arpa/inet.h>
 #include <fcntl.h>
 #include "ft_irc.hpp"
 #include "Client.hpp"

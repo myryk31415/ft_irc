@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:38:40 by padam             #+#    #+#             */
-/*   Updated: 2024/10/17 10:34:33 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/17 11:16:14 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,21 @@ void	Server::setup_server_socket()
 {
 	_server_socket_fd = socket(AF_INET, SOCK_STREAM, 0); // create IPv4 TCP socket
 	if (_server_socket_fd == -1)
-		throw(std::runtime_error("socket creation failed"));
+		throw(std::runtime_error("server socket creation failed"));
 
 	sockaddr_in addr;
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(_port); // convert from host to network byte order
 	addr.sin_addr.s_addr = INADDR_ANY;
 	if (bind(_server_socket_fd, (struct sockaddr *)&addr, sizeof(sockaddr_in)) == -1)
-		throw(std::runtime_error("socket binding failed"));
+		throw(std::runtime_error("server socket binding failed"));
 	int value = 1;
 	if (setsockopt(_server_socket_fd, SOL_SOCKET, SO_REUSEADDR, &value, sizeof(value)) == -1)
-		throw(std::runtime_error("setting socket option `REUSEADDR` failed"));
+		throw(std::runtime_error("setting server socket option `REUSEADDR` failed"));
 	if (fcntl(_server_socket_fd, F_SETFL, O_NONBLOCK) == -1) // make fd nonblocking for MacOS
-		throw(std::runtime_error("setting socket to `NONBLOCK` failed"));
+		throw(std::runtime_error("setting server socket to `NONBLOCK` failed"));
 	if (listen(_server_socket_fd, SOMAXCONN) == -1) // wait for connections
-		throw(std::runtime_error("socket listening failed"));
+		throw(std::runtime_error("server socket listening failed"));
 
 	struct pollfd new_poll;
 	new_poll.fd = _server_socket_fd;
@@ -115,7 +115,26 @@ void	Server::poll()
 
 void	Server::accept_client()
 {
+	Client		client;
+	sockaddr_in	addr;
+	socklen_t	len = sizeof(addr);
 
+	int	client_fd = accept(_server_socket_fd, (sockaddr *)&addr, &len);
+	if (client_fd == -1)
+		throw (std::runtime_error("accepting client failed"));
+
+	if (fcntl(client_fd, F_SETFL, O_NONBLOCK) == -1)
+		throw (std::runtime_error("setting client socket to `NONBLOCK` failed"));
+
+	pollfd	client_poll;
+	client_poll.fd = client_fd;
+	client_poll.events = POLLIN;
+	client_poll.revents = 0;
+
+	client.set_fd(client_fd);
+	client.set_ip_addr(inet_ntoa(addr.sin_addr));
+	_clients.push_back(client);
+	_sockets.push_back(client_poll);
 }
 
 void	Server::receive_data()
