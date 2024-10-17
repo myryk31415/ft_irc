@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:38:40 by padam             #+#    #+#             */
-/*   Updated: 2024/10/17 11:16:14 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/17 20:07:09 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	Server::poll()
 				if ((*iter).fd == _server_socket_fd)
 					accept_client();
 				else
-					receive_data();
+					receive_data((*iter).fd);
 			}
 		}
 	}
@@ -135,9 +135,33 @@ void	Server::accept_client()
 	client.set_ip_addr(inet_ntoa(addr.sin_addr));
 	_clients.push_back(client);
 	_sockets.push_back(client_poll);
+
+	std::cout << GREEN << "Client " << client_fd << " connected" << RESET << std::endl;
 }
 
-void	Server::receive_data()
+void	Server::receive_data(int fd)
 {
+	char	buff[1024];
+	memset(buff, 0, sizeof(buff));
 
+	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1, 0);
+
+	if (bytes <= 0)
+	{
+		std::cout << RED << "Client " << fd << " has disconnected" << std::endl;
+		clear_client(fd);
+		close(fd);
+	} else {
+		std::cout << MAGENTA << "Client " << fd << " data: " << RESET << buff << std::endl;
+	}
+}
+
+void	Server::clear_client(int fd)
+{
+	for (auto iter = _sockets.begin(); iter != _sockets.end(); iter++)
+		if ((*iter).fd == fd)
+			_sockets.erase(iter);
+	for (auto iter = _clients.begin(); iter != _clients.end(); iter++)
+		if ((*iter).get_fd() == fd)
+			_clients.erase(iter);
 }

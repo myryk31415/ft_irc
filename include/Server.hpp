@@ -6,7 +6,7 @@
 /*   By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 15:38:31 by padam             #+#    #+#             */
-/*   Updated: 2024/10/17 11:02:45 by padam            ###   ########.fr       */
+/*   Updated: 2024/10/17 19:55:28 by padam            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <vector>
 #include <poll.h>
 #include <csignal>
+#include <cstring>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
@@ -42,7 +43,8 @@ class Server
 		void		init();
 		void		setup_server_socket();
 		void		shutdown();
+		void		clear_client(int fd);
 		void		poll();
 		void		accept_client();
-		void		receive_data();
+		void		receive_data(int fd);
 };
