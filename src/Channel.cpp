@@ -56,3 +56,19 @@ void Channel::removeOperator(Client *client)
 	_operators.erase(client);
 	client->receiveMsg("You are no longer an operator on " + _name);
 }
+void Channel::setTopic(const std::string &topic)
+{
+	_topic = topic;
+}
+
+const std::string &Channel::getTopic() const
+{
+	return _topic;
+}
+
+void Channel::inviteUser(Client *invitedClient, Client *inviter)
+{
+	if (_users.find(inviter->getNick()) == _users.end())
+		throw std::runtime_error("Cannot invite " + invitedClient->getNick() + ": Inviting User " + inviter->getNick() + " is not in channel");
+		
+}

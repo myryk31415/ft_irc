@@ -1,5 +1,5 @@
 #pragma once
-#include <unordered_set>
+#include <unordered_map>
 #include <string>
 #include <bitset>
 #include "Client.hpp"
@@ -20,9 +20,9 @@ class Channel
 	private:
 		std::string _name;
 		std::string _topic;
-		std::unordered_set<Client *> _users;
-		std::unordered_set<Client *> _operators;
-		std::unordered_set<Client *> _invitedUsers;
+		std::unordered_map<std::string, Client *> _users;
+		std::unordered_map<std::string, Client *> _operators;
+		std::unordered_map<std::string, Client *> _invitedUsers;
 		std::bitset<COUNT> _modes;
 		int _userLimit;
 		std::string _key;
@@ -46,7 +46,7 @@ class Channel
 		bool isModeSet(int mode) const;
 
 		//Invite Handling
-		void inviteUser(Client *client);
+		void inviteUser(Client *invitedClient, Client *inviter)
 		bool isUserInvited(Client *client) const;
 
 		//key Handling
