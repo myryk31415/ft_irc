@@ -42,7 +42,7 @@ void Channel::addOperator(Client *client)
 	if (_operators.find(client) != _operators.end())
 		throw std::runtime_error("Cannot make " + client->getNick() + " an operator: User is already an operator in this channel");
 	_operators.insert(client);
-	client->sendMsg("You are now an operator on " + _name);
+	client->receiveMsg("You are now an operator on " + _name);
 }
 
 void Channel::removeOperator(Client *client)
@@ -54,6 +54,5 @@ void Channel::removeOperator(Client *client)
 	if (_operators.size() == 1)
 		throw std::runtime_error("Cannot remove operator rights of " + client->getNick() + ": User is the last operator in channel");
 	_operators.erase(client);
-	client->sendMsg("You are no longer an operator on " + _name);
+	client->receiveMsg("You are no longer an operator on " + _name);
 }
-void Channel::

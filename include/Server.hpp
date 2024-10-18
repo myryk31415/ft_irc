@@ -24,7 +24,6 @@ class Server
 		std::vector<struct pollfd> _sockets;
 		std::vector<Client> _clients;
 	public:
-		Server() = delete;
 		Server(int port);
 		~Server();
 

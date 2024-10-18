@@ -13,6 +13,8 @@ enum ChannelModes {
 	COUNT
 };
 
+class Client;
+
 class Channel
 {
 	private:
