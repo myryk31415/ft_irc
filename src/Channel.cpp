@@ -20,7 +20,7 @@ void Channel::addUser(Client *client)
 	if (_users.size() >= _userLimit)
 		throw std::runtime_error("Channel is full");
 	_users[client->getNick()] = client;
-	broadcastMessage(client->getNick() + " has joined the channel");
+	systemMessage(client->getNick() + " has joined the channel");
 }
 
 void Channel::removeUser(Client *client)
@@ -28,7 +28,7 @@ void Channel::removeUser(Client *client)
 	if (_users.find(client->getNick()) == _users.end())
 		throw std::runtime_error("User is not in channel");
 	_users.erase(client->getNick());
-	broadcastMessage(client->getNick() + " has left the channel");
+	systemMessage(client->getNick() + " has left the channel");
 	if (_operators.find(client->getNick()) != _operators.end())
 		_operators.erase(client->getNick());
 	if (_users.empty())
@@ -99,7 +99,6 @@ bool Channel::isModeSet(int mode) const
 	return (_modes[mode]);
 }
 
-<<<<<<< Updated upstream
 bool Channel::isUserInvited(Client *client) const
 {
 	if (_invitedUsers.find(client->getNick()) != _invitedUsers.end())
@@ -123,7 +122,29 @@ const std::string &Channel::getKey() const
 	return _key;
 }
 
+void Channel::systemMessage(const std::string &message)
+{
+	std::for_each(_users.begin(), _users.end(), [message](Client * user) {
+		user->receiveMsg(message);
+	});
+}
 
-=======
-void Channel::
->>>>>>> Stashed changes
+void Channel::broadcastMessage(const std::string &message, Client *sender)
+{
+	std::string newMessage = "<" + sender->getNick() + "> " + message;
+	if (_users.size() == 1)
+		return ;
+	if (_users.size() == 2)
+	{
+		if (_users.begin()->second != sender)
+			_users.begin()->second->receiveMsg(newMessage);
+		else
+			(++_users.begin())->second->receiveMsg(newMessage);
+		return ;
+	}
+	for (auto it = _users.begin(); it != _users.end(); it++)
+	{§
+		if (it->second != sender)
+			it->second->receiveMsg(newMessage);
+	}
+}

@@ -61,7 +61,7 @@ class Channel
 
 		//Messages
 		void broadcastMessage(const std::string &message, Client *sender);
-		void broadcastMessage(const std::string &message);
+		void systemMessage(const std::string &message);
 
 		void closeChannel(void);
 };
