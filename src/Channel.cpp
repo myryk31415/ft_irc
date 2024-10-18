@@ -121,3 +121,5 @@ const std::string &Channel::getKey() const
 		throw std::runtime_error("No key set yet for " + _name);
 	return _key;
 }
+
+
