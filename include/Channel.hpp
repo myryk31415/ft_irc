@@ -28,6 +28,7 @@ class Channel
 		std::bitset<COUNT> _modes;
 		int _userLimit;
 		std::string _key;
+
 	public:
 		Channel(const std::string &channelName);
 		Channel(const std::string &channelName, const std::string &key);
@@ -36,7 +37,6 @@ class Channel
 		void removeUser(Client *client);
 		void addOperator(Client *client);
 		void removeOperator(Client *client);
-		void kickUser(Client *client);
 
 		//Topic Handling
 		void setTopic(const std::string &topic);
@@ -57,7 +57,7 @@ class Channel
 
 		//Getters
 		const std::string &getName() const;
-		int getUserLimit() const;
+		const int getUserLimit() const;
 
 		//Messages
 		void broadcastMessage(const std::string &message, Client *sender);

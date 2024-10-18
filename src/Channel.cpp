@@ -66,6 +66,11 @@ const std::string &Channel::getTopic() const
 	return _topic;
 }
 
+const int Channel::getUserLimit() const
+{
+	return _userLimit;
+}
+
 void Channel::inviteUser(Client *invitedClient, Client *inviter)
 {
 	if (_users.find(inviter->getNick()) == _users.end())
@@ -143,7 +148,7 @@ void Channel::broadcastMessage(const std::string &message, Client *sender)
 		return ;
 	}
 	for (auto it = _users.begin(); it != _users.end(); it++)
-	{§
+	{
 		if (it->second != sender)
 			it->second->receiveMsg(newMessage);
 	}
