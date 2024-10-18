@@ -11,7 +11,7 @@ enum ChannelModes {
 	USER_LIMIT,
 	KEY,
 	COUNT
-};
+};	
 
 class Client;
 
@@ -46,7 +46,7 @@ class Channel
 		bool isModeSet(int mode) const;
 
 		//Invite Handling
-		void inviteUser(Client *invitedClient, Client *inviter)
+		void inviteUser(Client *invitedClient, Client *inviter);
 		bool isUserInvited(Client *client) const;
 
 		//key Handling
