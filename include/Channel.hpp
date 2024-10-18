@@ -1,6 +1,8 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <cctype>
+#include <algorithm>
 #include <bitset>
 #include "Client.hpp"
 
@@ -11,7 +13,7 @@ enum ChannelModes {
 	USER_LIMIT,
 	KEY,
 	COUNT
-};	
+};
 
 class Client;
 

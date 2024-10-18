@@ -98,3 +98,26 @@ bool Channel::isModeSet(int mode) const
 {
 	return (_modes[mode]);
 }
+
+bool Channel::isUserInvited(Client *client) const
+{
+	if (_invitedUsers.find(client->getNick()) != _invitedUsers.end())
+		return true;
+	return false;
+}
+
+void Channel::setKey(const std::string &key)
+{
+	if (std::any_of(key.begin(), key.end(), ::isspace) == true)
+		throw std::runtime_error("Couldnt set key " + key + " for channel: No Whitespaces allowed in channelkeys");
+	if (!key.compare(_key))
+		throw std::runtime_error("Couldnt set key " + key + " for channel: Key already set to this value");
+	_key = key;
+}
+
+const std::string &Channel::getKey() const
+{
+	if (_key.empty())
+		throw std::runtime_error("No key set yet for " + _name);
+	return _key;
+}
