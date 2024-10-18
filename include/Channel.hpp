@@ -12,6 +12,7 @@ enum ChannelModes {
 	KEY,
 	COUNT
 };
+
 class Channel
 {
 	private:
@@ -54,6 +55,9 @@ class Channel
 		const std::string &getName() const;
 		int getUserLimit() const;
 
-		//Message Broadcasting
+		//Messages
 		void broadcastMessage(const std::string &message, Client *sender);
+		void broadcastMessage(const std::string &message);
+
+		void closeChannel(void);
 };
