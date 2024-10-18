@@ -99,6 +99,7 @@ bool Channel::isModeSet(int mode) const
 	return (_modes[mode]);
 }
 
+<<<<<<< Updated upstream
 bool Channel::isUserInvited(Client *client) const
 {
 	if (_invitedUsers.find(client->getNick()) != _invitedUsers.end())
@@ -123,3 +124,6 @@ const std::string &Channel::getKey() const
 }
 
 
+=======
+void Channel::
+>>>>>>> Stashed changes
