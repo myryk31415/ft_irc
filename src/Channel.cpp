@@ -158,3 +158,17 @@ const std::string& Channel::getName() const
 {
 	return _name;
 }
+
+Client * Channel::getUser(std::string user) const
+{
+	if (_users.find(user) == _users.end())
+		return NULL;
+	return _users.at(user);
+}
+
+Client * Channel::getOperator(std::string operatr) const
+{
+	if (_operators.find(operatr) == _operators.end())
+		return NULL;
+	return _operators.at(operatr);
+}
