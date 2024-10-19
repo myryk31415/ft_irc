@@ -23,6 +23,7 @@ class Server
 		int _server_socket_fd;
 		std::vector<struct pollfd> _sockets;
 		std::vector<Client> _clients;
+		// std::unordered_map<std::string, 
 	public:
 		Server(int port);
 		~Server();

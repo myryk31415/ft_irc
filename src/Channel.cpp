@@ -153,3 +153,8 @@ void Channel::broadcastMessage(const std::string &message, Client *sender)
 			it->second->receiveMsg(newMessage);
 	}
 }
+
+const std::string& Channel::getName() const
+{
+	return _name;
+}
