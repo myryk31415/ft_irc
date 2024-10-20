@@ -172,3 +172,22 @@ Client * Channel::getOperator(std::string operatr) const
 		return NULL;
 	return _operators.at(operatr);
 }
+
+std::string Channel::getModestring() const
+{
+	std::string modestring = "+";
+
+	if (isModeSet(INVITE_ONLY))
+		modestring += "i";
+	if (isModeSet(TOPIC_SETTABLE_BY_OPERATOR))
+		modestring += "t";
+	if (isModeSet(MODERATED))
+		modestring += "o";
+	if (isModeSet(USER_LIMIT))
+		modestring += "l";
+	if (isModeSet(KEY))
+		modestring += "k";
+	if (modestring.size() == 1)
+		return "";
+	return modestring;
+}

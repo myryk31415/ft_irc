@@ -42,13 +42,13 @@ void Server::KICK(std::string cmd, int fd)
 	Client *sender = getClient(fd);
 	if (usersToKick.empty() || channel.empty())
 		{sendResponse(ERR_NEEDMOREPARAMS(sender->getNick(), cmd), fd); return ;}
-	Channel *curChannel = _channels[channel];
-	if (!curChannel->getUser(sender->getNick())) // check if sender is in channel
-		sendResponse(ERR_NOTONCHANNEL(sender->getNick(), channel), fd);
-	if (!curChannel->getOperator(sender->getNick())) // check if sender has perms
-		sendResponse(ERR_CHANOPRIVSNEEDED(sender->getNick(), channel), fd);
 	if (_channels.find(channel) != _channels.end())
 	{
+		Channel *curChannel = _channels[channel];
+		if (!curChannel->getUser(sender->getNick())) // check if sender is in channel
+			{sendResponse(ERR_NOTONCHANNEL(sender->getNick(), channel), fd); return ;}
+		if (!curChannel->getOperator(sender->getNick())) // check if sender has perms
+		{sendResponse(ERR_CHANOPRIVSNEEDED(sender->getNick(), channel), fd); return ;}
 		for (auto it = usersToKick.begin(); it != usersToKick.end(); it++) // Iterate through all users to kick
 		{
 				if (!curChannel->getUser(*it)) // check if user to kick is in channel

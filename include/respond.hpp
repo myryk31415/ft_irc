@@ -14,3 +14,4 @@
 
 
 //Repliies
+# define RPL_CHANNELMODEIS(nick, channel, modes) (": 324 " + nick + " #" + channel + " " + modes + CRLF)

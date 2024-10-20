@@ -38,5 +38,14 @@ void Server::MODE(std::string cmd, int fd)
 		sendResponse(ERR_NEEDMOREPARAMS(sender->getNick(), cmd), fd);
 	getVars(target, modestring, params, cmd);
 	splitParams(params, modeArgs);
-	
+	if (target[0] != '#' || _channels.find(target.substr(1)) == _channels.end())
+		{sendResponse(ERR_NOSUCHCHANNEL(sender->getNick(), target.substr(1)), fd); return;}
+	Channel *channel = _channels[target.substr(1)];
+	if (!channel->getUser(sender->getNick())) // check if sender is in channel
+		{sendResponse(ERR_NOTONCHANNEL(sender->getNick(), target.substr(1)), fd); return ;}
+	if (!modestring.empty())
+		{sendResponse(RPL_CHANNELMODEIS(sender->getNick(), target.substr(1), channel->getModestring()), fd); return ;}
+	if (!channel->getOperator(sender->getNick())) // check if sender has perms
+		{sendResponse(ERR_CHANOPRIVSNEEDED(sender->getNick(), target.substr(1)), fd); return ;}
+
 }
