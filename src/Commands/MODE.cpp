@@ -26,6 +26,7 @@ void Server::MODE(std::string cmd, int fd)
 	std::string target;
 	std::string modestring;
 	std::string params;
+	int			sign;
 	std::vector<std::string> modeArgs;
 	Client * sender = getClient(fd);
 
@@ -38,7 +39,7 @@ void Server::MODE(std::string cmd, int fd)
 		sendResponse(ERR_NEEDMOREPARAMS(sender->getNick(), cmd), fd);
 	getVars(target, modestring, params, cmd);
 	splitParams(params, modeArgs);
-	if (target[0] != '#' || _channels.find(target.substr(1)) == _channels.end())
+	if (!target.empty() || target[0] != '#' || _channels.find(target.substr(1)) == _channels.end())
 		{sendResponse(ERR_NOSUCHCHANNEL(sender->getNick(), target.substr(1)), fd); return;}
 	Channel *channel = _channels[target.substr(1)];
 	if (!channel->getUser(sender->getNick())) // check if sender is in channel
@@ -47,5 +48,20 @@ void Server::MODE(std::string cmd, int fd)
 		{sendResponse(RPL_CHANNELMODEIS(sender->getNick(), target.substr(1), channel->getModestring()), fd); return ;}
 	if (!channel->getOperator(sender->getNick())) // check if sender has perms
 		{sendResponse(ERR_CHANOPRIVSNEEDED(sender->getNick(), target.substr(1)), fd); return ;}
+	for (auto pos = modestring.begin(); pos != modestring.end(); pos)
+	{
+		if (*pos == '+' || *pos == '-')
+			sign = (*pos == '+');
+		if (*pos == 'i')
+			invite_only(sign, channel, fd);
+		if (*pos == 't')
+			topic_restict(sign, channel, fd);
+		if (*pos == 'k')
+			channel_key(sign, channel, fd);
+		if (*pos =='o')
+			operator_priv(sign, channel, fd);
+		if (*pos == 'l')
+			user_limit(sign, channel, fd);
+	}
 
 }

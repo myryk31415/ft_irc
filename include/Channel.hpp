@@ -24,7 +24,7 @@ class Channel
 		std::unordered_map<std::string, Client *> _users;
 		std::unordered_map<std::string, Client *> _operators;
 		std::unordered_map<std::string, Client *> _invitedUsers;
-		std::bitset<5> _modes;
+		std::vector<std::pair<bool, std::string>> _modes;
 		int _userLimit;
 		std::string _key;
 
