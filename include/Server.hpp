@@ -16,7 +16,7 @@
 #include "ft_irc.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
-
+#include "respond.hpp"
 class Server
 {
 	private:
@@ -41,8 +41,11 @@ class Server
 		void		accept_client();
 		Client *	getClient(int fd);
 		void		receive_data(int fd);
-		void		sendError(std::string numeric, std::string client, std::string msg, int fd);
-
+		// void		sendError(std::string numeric, std::string client, std::string msg, int fd);
+		// void		sendError(std::string numeric, std::string client, std::string channel, std::string msg, int fd);
+		template <typename... Args>
+		void		sendError(std::string numeric, int fd, std::string client, Args... args);
+		void		sendResponse(std::string message, int fd);
 		//Commands
 		void KICK(std::string cmd, int fd);
 };

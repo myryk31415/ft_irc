@@ -155,11 +155,35 @@ void	Server::clear_client(int fd)
 			_clients.erase(iter);
 }
 
-void Server::sendError(std::string numeric, std::string client, std::string msg, int fd)
+// void Server::sendError(std::string numeric, std::string client, std::string msg, int fd)
+// {
+// 	std::string errormsg = ":" + _name + " " + numeric + " " + client + " :" + msg + "\r\n";
+// 	if (send(fd, errormsg.c_str(), errormsg.size(), 0) == -1)
+// 		std::cerr << "send() failed" << std::endl;
+// }
+
+// void Server::sendError(std::string numeric, std::string client, std::string channel, std::string msg, int fd)
+// {
+// 	std::string errormsg = ":" + _name + " " + numeric + " " + client + " " + channel + " :" + msg + "\r\n";
+// 	if (send(fd, errormsg.c_str(), errormsg.size(), 0) == -1)
+// 		std::cerr << "send() failed" << std::endl;
+// }
+template <typename... Args>
+void Server::sendError(std::string numeric, int fd, std::string client, Args... args) // Pls write : infront of the msg
 {
 	std::stringstream ss;
 
-	std::string errormsg = ":" + _name + " " + numeric + " " + client + " :" + msg + "\r\n";
-	if (send(fd, errormsg.c_str(), errormsg.size(), 0) == -1)
+	ss << ":" << _name << " " << numeric;
+
+	((ss << args << " "), ...);
+	ss <<"\r\n";
+	std::string out = ss.str()
+	if (send(fd, out.c_str(), out.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}
+
+void Server::sendResponse(std::string message, int fd)
+{
+	if (send(fd, message.c_str(), message.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }

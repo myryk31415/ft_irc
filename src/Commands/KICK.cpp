@@ -12,8 +12,6 @@ std::string splitCmdKick(std::string cmd, std::string &channel, std::vector<std:
 	channel = cmd.substr(0, pos);
 	if (channel[0] == '#')
 		channel.erase(channel.begin());
-	else
-		throw std::runtime_error("No such channel");
 	cmd = cmd.substr(pos + 1);
 	pos = cmd.find_first_of(' ');
 	std::string substr = cmd.substr(0, pos);
@@ -31,8 +29,6 @@ std::string splitCmdKick(std::string cmd, std::string &channel, std::vector<std:
 		else
 			reason = cmd.substr(0, cmd.find_first_of(' '));
 	}
-	if (!channel.empty() && !usersToKick.empty())
-		sendError();
 	if (reason.empty())
 		reason = "Kick because lol";
 	return reason;
@@ -44,19 +40,19 @@ void Server::KICK(std::string cmd, int fd)
 	std::string channel;
 	std::string reason = splitCmdKick(cmd, channel, usersToKick);
 	Client *sender = getClient(fd);
-	if (usersToKick.empty())
-		throw std::runtime_error("No users to kick");
+	if (usersToKick.empty() || channel.empty())
+		sendResponse(ERR_NEEDMOREPARAMS(sender->getNick(), cmd), fd);
 	for (auto it = usersToKick.begin(); it != usersToKick.end(); it++) // Iterate through all users to kick
 	{
 		if (_channels.find(channel) != _channels.end())
 		{
 			Channel *curChannel = _channels[channel];
 			if (!curChannel->getUser(sender->getNick())) // check if sender is in channel
-				throw std::runtime_error("Sender not in channel");
+				{sendResponse(ERR_NOTONCHANNEL(sender->getNick(), channel), fd); continue;}
 			if (!curChannel->getOperator(sender->getNick())) // check if sender has perms
-				throw std::runtime_error("Sender is not operator in channel");
+				{sendResponse(ERR_CHANOPRIVSNEEDED(sender->getNick(), channel), fd); continue;}
 			if (!curChannel->getUser(*it)) // check if user to kick is in channel
-				throw std::runtime_error("User to kick not in channel");
+				{sendResponse(ERR_USERNOTINCHANNEL(sender->getNick(), *it, channel), fd); continue;}
 			std::stringstream ss;
 			ss << ":" << sender->getNick() << "!" << curChannel->getUser(*it)->getUsername() << "@" << "localhost" << " KICK #" << curChannel->getName() << " " << curChannel->getUser(*it)->getNick();
 			curChannel->broadcastMessage(ss.str(), sender);
@@ -66,6 +62,6 @@ void Server::KICK(std::string cmd, int fd)
 			// If users count == 0
 		}
 		else
-			throw std::runtime_error("Channel not found");
+			{sendResponse(ERR_NOSUCHCHANNEL(sender->getNick(), channel), fd); continue;}
 	}
 }
