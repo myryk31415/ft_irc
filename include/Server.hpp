@@ -26,6 +26,7 @@ class Server
 		std::vector<struct pollfd> _sockets;
 		std::vector<Client> _clients;
 		std::unordered_map<std::string, Channel *> _channels;
+		std::string			_name;
 	public:
 		Server(int port);
 		~Server();
@@ -40,6 +41,7 @@ class Server
 		void		accept_client();
 		Client *	getClient(int fd);
 		void		receive_data(int fd);
+		void		sendError(std::string numeric, std::string client, std::string msg, int fd);
 
 		//Commands
 		void KICK(std::string cmd, int fd);

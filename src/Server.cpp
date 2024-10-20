@@ -154,3 +154,12 @@ void	Server::clear_client(int fd)
 		if ((*iter).get_fd() == fd)
 			_clients.erase(iter);
 }
+
+void Server::sendError(std::string numeric, std::string client, std::string msg, int fd)
+{
+	std::stringstream ss;
+
+	std::string errormsg = ":" + _name + " " + numeric + " " + client + " :" + msg + "\r\n";
+	if (send(fd, errormsg.c_str(), errormsg.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+}

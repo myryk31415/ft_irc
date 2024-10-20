@@ -32,7 +32,7 @@ std::string splitCmdKick(std::string cmd, std::string &channel, std::vector<std:
 			reason = cmd.substr(0, cmd.find_first_of(' '));
 	}
 	if (!channel.empty() && !usersToKick.empty())
-		throw  std::runtime_error("Excpected 2 or 3 arguments");
+		sendError();
 	if (reason.empty())
 		reason = "Kick because lol";
 	return reason;
@@ -44,6 +44,8 @@ void Server::KICK(std::string cmd, int fd)
 	std::string channel;
 	std::string reason = splitCmdKick(cmd, channel, usersToKick);
 	Client *sender = getClient(fd);
+	if (usersToKick.empty())
+		throw std::runtime_error("No users to kick");
 	for (auto it = usersToKick.begin(); it != usersToKick.end(); it++) // Iterate through all users to kick
 	{
 		if (_channels.find(channel) != _channels.end())
@@ -56,7 +58,12 @@ void Server::KICK(std::string cmd, int fd)
 			if (!curChannel->getUser(*it)) // check if user to kick is in channel
 				throw std::runtime_error("User to kick not in channel");
 			std::stringstream ss;
-			ss << ":" << sender->getNick() << "!"
+			ss << ":" << sender->getNick() << "!" << curChannel->getUser(*it)->getUsername() << "@" << "localhost" << " KICK #" << curChannel->getName() << " " << curChannel->getUser(*it)->getNick();
+			curChannel->broadcastMessage(ss.str(), sender);
+			curChannel->removeUser(curChannel->getUser(*it));
+			if (curChannel->getOperator(*it))
+				curChannel->removeOperator(curChannel->getOperator(*it));
+			// If users count == 0
 		}
 		else
 			throw std::runtime_error("Channel not found");
