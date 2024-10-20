@@ -37,22 +37,18 @@ void Channel::removeUser(Client *client)
 
 void Channel::addOperator(Client *client)
 {
-	if (_users.find(client->getNick()) == _users.end())
-		throw std::runtime_error("Cannot make " + client->getNick() + " an operator: User is not in channel");
 	if (_operators.find(client->getNick()) != _operators.end())
-		throw std::runtime_error("Cannot make " + client->getNick() + " an operator: User is already an operator in this channel");
+		{std::cerr << "Cannot make " + client->getNick() + " an operator: User is already an operator in this channel" << std::endl; return ;}
 	_operators[client->getNick()] = client;
 	client->receiveMsg("You are now an operator on " + _name);
 }
 
 void Channel::removeOperator(Client *client)
 {
-	if (_users.find(client->getNick()) == _users.end())
-		throw std::runtime_error("Cannot remove operator rights of " + client->getNick() + ": User is not in channel");
 	if (_operators.find(client->getNick()) == _operators.end())
-		throw std::runtime_error("Cannot remove operator rights of " + client->getNick() + ": User is not an operator in this channel");
+		{std::cerr << "Cannot remove operator rights of " + client->getNick() + ": User is not an operator in this channel" << std::endl; return ;}
 	if (_operators.size() == 1)
-		throw std::runtime_error("Cannot remove operator rights of " + client->getNick() + ": User is the last operator in channel");
+		{std::cerr << "Cannot remove operator rights of " + client->getNick() + ": User is the last operator in channel" << std::endl; return ;} //sollen wir ?
 	_operators.erase(client->getNick());
 	client->receiveMsg("You are no longer an operator on " + _name);
 }

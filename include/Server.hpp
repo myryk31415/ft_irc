@@ -24,7 +24,7 @@ class Server
 		int _port;
 		int _server_socket_fd;
 		std::vector<struct pollfd> _sockets;
-		std::vector<Client> _clients;
+		std::unordered_map<std::string, Client *> _clients;
 		std::unordered_map<std::string, Channel *> _channels;
 		std::string			_name;
 	public:
@@ -46,6 +46,9 @@ class Server
 		template <typename... Args>
 		void		sendError(std::string numeric, int fd, std::string client, Args... args);
 		void		sendResponse(std::string message, int fd);
+
+
+		void		operator_priv(bool sign, Channel* channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd);
 		//Commands
 		void KICK(std::string cmd, int fd);
 		void MODE(std::string cmd, int fd);
