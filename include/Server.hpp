@@ -48,4 +48,5 @@ class Server
 		void		sendResponse(std::string message, int fd);
 		//Commands
 		void KICK(std::string cmd, int fd);
+		void MODE(std::string cmd, int fd);
 };
