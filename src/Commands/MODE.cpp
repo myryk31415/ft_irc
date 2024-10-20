@@ -21,6 +21,11 @@ void getVars(std::string &target, std::string &modestring, std::string &params, 
 		params = cmd.substr(found);
 }
 
+void invite_only(int sign, Channel* channel, int fd)
+{
+
+}
+
 void Server::MODE(std::string cmd, int fd)
 {
 	std::string target;
@@ -45,7 +50,7 @@ void Server::MODE(std::string cmd, int fd)
 	if (!channel->getUser(sender->getNick())) // check if sender is in channel
 		{sendResponse(ERR_NOTONCHANNEL(sender->getNick(), target.substr(1)), fd); return ;}
 	if (!modestring.empty())
-		{sendResponse(RPL_CHANNELMODEIS(sender->getNick(), target.substr(1), channel->getModestring()), fd); return ;}
+		{sendResponse(RPL_CHANNELMODEIS(sender->getNick(), target.substr(1), channel->getModestring(), channel->getModesvalues()), fd); return ;}
 	if (!channel->getOperator(sender->getNick())) // check if sender has perms
 		{sendResponse(ERR_CHANOPRIVSNEEDED(sender->getNick(), target.substr(1)), fd); return ;}
 	for (auto pos = modestring.begin(); pos != modestring.end(); pos)

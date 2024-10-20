@@ -12,6 +12,7 @@ enum ChannelModes {
 	MODERATED,
 	USER_LIMIT,
 	KEY,
+	COUNT
 };
 
 class Client;
@@ -24,7 +25,7 @@ class Channel
 		std::unordered_map<std::string, Client *> _users;
 		std::unordered_map<std::string, Client *> _operators;
 		std::unordered_map<std::string, Client *> _invitedUsers;
-		std::vector<std::pair<bool, std::string>> _modes;
+		std::vector<std::pair<bool, std::string>> _modes{COUNT};
 		int _userLimit;
 		std::string _key;
 
@@ -42,10 +43,10 @@ class Channel
 		const std::string &getTopic() const;
 
 		//Modes Handling
-		void setMode(int mode);
-		void unsetMode(int mode);
+		void setMode(int mode, std::string value, bool set);
 		bool isModeSet(int mode) const;
 		std::string getModestring() const;
+		std::string getModesvalues() const;
 
 		//Invite Handling
 		void inviteUser(Client *invitedClient, Client *inviter);

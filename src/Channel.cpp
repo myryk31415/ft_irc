@@ -1,11 +1,11 @@
 
 #include "Channel.hpp"
 
-Channel::Channel(const std::string &channelName) : _name(channelName)
+Channel::Channel(const std::string &channelName) : _name(channelName), _modes(5)
 {
 }
 
-Channel::Channel(const std::string &channelName, const std::string &key) : _name(channelName), _key(key)
+Channel::Channel(const std::string &channelName, const std::string &key) : _name(channelName), _key(key), _modes(5)
 {
 }
 
@@ -85,23 +85,18 @@ void Channel::inviteUser(Client *invitedClient, Client *inviter)
 	invitedClient->receiveMsg("You have been invited to the channel " + this->_name + " by " + inviter->getNick());
 }
 
-void Channel::setMode(int mode)
+void Channel::setMode(int mode, std::string value, bool set)
 {
-	if (_modes[mode] == 1)
-		throw std::runtime_error("Mode already set");
-	_modes[mode] = 1;
-}
-
-void Channel::unsetMode(int mode)
-{
-	if (_modes[mode] == 0)
-		throw std::runtime_error("Mode not set");
-	_modes[mode] = 0;
+	if (mode >= 0 && mode < static_cast<int>(_modes.size()))
+	{
+		_modes[mode].first = set;
+		_modes[mode].second = value;
+	}
 }
 
 bool Channel::isModeSet(int mode) const
 {
-	return (_modes[mode]);
+	return (_modes[mode].first);
 }
 
 bool Channel::isUserInvited(Client *client) const
@@ -189,5 +184,17 @@ std::string Channel::getModestring() const
 		modestring += "k";
 	if (modestring.size() == 1)
 		return "";
+	return modestring;
+}
+
+
+std::string Channel::getModesvalues() const
+{
+	std::string modestring;
+
+	if (isModeSet(USER_LIMIT))
+		modestring += _modes[USER_LIMIT].second;
+	if (isModeSet(KEY))
+		modestring += _modes[KEY].second;
 	return modestring;
 }
