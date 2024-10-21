@@ -134,10 +134,10 @@ void	Server::acceptClient()
 void	Server::receiveData(int fd)
 {
 	char	buff[1024];
-	memset(buff, 0, sizeof(buff));
+	// memset(buff, 0, sizeof(buff));
 
 	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1, 0);
-
+	buff[bytes] = 0;
 	if (bytes <= 0)
 	{
 		std::cout << RED << "Client " << fd << " has disconnected" << std::endl;
@@ -203,8 +203,34 @@ Client*		Server::getClient(int fd)
 	return NULL;
 }
 
-// forward_list<std::string>	Server::parseCommand(const std::string command)
-// {
-// 	forward_list<std::string>
-// }
+std::vector<std::string>	Server::parseCommand(const std::string command)
+{
+	std::vector<std::string>	args;
+	std::string cmd;
+	size_t	colon = command.find_first_of(':');
+	size_t	space = command.find_first_of(' ');
+	size_t	i;
+
+	if (space < colon)
+	{
+		cmd = command.substr(0, space);
+		i = space;
+	}
+	else
+	{
+		cmd = command.substr(0, colon);
+		i = colon;
+	}
+	space = command.substr(i, command.size() - 1).find_first_of(' ');
+	while (space < colon && space != std::string::npos);
+	{
+		args.push_back(command.substr(0, space));
+		i = space;
+		space = command.substr(i, command.size() - 1).find_first_of(' ');
+	}
+	if (colon != std::string::npos)
+		args.push_back(command.substr(i, colon));
+	args.push_back(command.substr(colon + 1, command.size() - 1));
+	return args;
+}
 
