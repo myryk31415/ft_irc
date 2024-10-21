@@ -37,6 +37,13 @@ int	main(int argc, char **argv)
 	pass = std::string(argv[2]);
 
 	Server server(port);
-	server.init();
+	try
+	{
+		server.init();
+	}
+	catch (const std::exception &e)
+	{
+		return 1;
+	}
 	server.poll();
 }

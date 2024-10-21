@@ -36,6 +36,7 @@ void	Server::init()
 		std::cout << RED << "Error while initializing server:" << std::endl;
 		std::cout << e.what() << RESET << std::endl;
 		shutdown();
+		throw(e);
 	}
 }
 
@@ -71,8 +72,8 @@ void	Server::shutdown()
 	std::cout << RED;
 	for(auto iter = _clients.begin(); iter != _clients.end(); iter++)
 	{
-		std::cout << "Disconnecting client " << (*iter).second.getFd() << std::endl;
-		close((*iter).second.getFd());
+		std::cout << "Disconnecting client " << iter->second.getFd() << std::endl;
+		close(iter->second.getFd());
 	}
 	if (_server_socket_fd != -1)
 	{
@@ -90,12 +91,12 @@ void	Server::poll()
 			throw(std::runtime_error("polling failed"));
 		for (auto iter = _sockets.begin(); iter != _sockets.end(); iter++)
 		{
-			if ((*iter).revents & POLLIN)
+			if (iter->revents & POLLIN)
 			{
-				if ((*iter).fd == _server_socket_fd)
+				if (iter->fd == _server_socket_fd)
 					acceptClient();
 				else
-					receiveData((*iter).fd);
+					receiveData(iter->fd);
 			}
 		}
 	}
@@ -109,6 +110,7 @@ void	Server::acceptClient()
 	socklen_t	len = sizeof(addr);
 
 	int	client_fd = accept(_server_socket_fd, (sockaddr *)&addr, &len);
+	perror("dies das irc");
 	if (client_fd == -1)
 		throw (std::runtime_error("accepting client failed"));
 

@@ -6,14 +6,14 @@
 #    By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/10/21 10:15:22 by padam            ###   ########.fr        #
+#    Updated: 2024/10/21 13:17:51 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ircserv
 
 CC = c++
-CFLAGS =  $(INCLUDES) #-Wall -Wextra -Werror -std=c++17
+CFLAGS =  $(INCLUDES) -g3 -std=c++17 #-Wall -Wextra -Werror
 INCLUDES = -I./include
 LIBS =
 
@@ -27,7 +27,7 @@ SRCS_MAIN =	main.cpp Server.cpp Client.cpp Channel.cpp
 SRCS_CMD = KICK.cpp MODE.cpp
 
 SRC_NAME =										$(SRCS_MAIN)	\
-			$(addprefix  Commands/,			$(SRCS_CMD))	\
+			$(addprefix  Commands/,				$(SRCS_CMD))	\
 
 RED = \033[1;31m
 GREEN = \033[1;32m
