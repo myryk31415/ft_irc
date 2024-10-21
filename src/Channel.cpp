@@ -13,44 +13,44 @@ Channel::~Channel()
 {
 }
 
-void Channel::addUser(Client *client)
+void Channel::addUser(Client client)
 {
-	if (_users.find(client->getNick()) != _users.end())
+	if (_users.find(client.getNick()) != _users.end())
 		throw std::runtime_error("User is already in channel");
 	if (_users.size() >= _userLimit)
 		throw std::runtime_error("Channel is full");
-	_users[client->getNick()] = client;
-	systemMessage(client->getNick() + " has joined the channel");
+	_users[client.getNick()] = client;
+	systemMessage(client.getNick() + " has joined the channel");
 }
 
-void Channel::removeUser(Client *client)
+void Channel::removeUser(Client client)
 {
-	if (_users.find(client->getNick()) == _users.end())
+	if (_users.find(client.getNick()) == _users.end())
 		throw std::runtime_error("User is not in channel");
-	_users.erase(client->getNick());
-	systemMessage(client->getNick() + " has left the channel");
-	if (_operators.find(client->getNick()) != _operators.end())
-		_operators.erase(client->getNick());
+	_users.erase(client.getNick());
+	systemMessage(client.getNick() + " has left the channel");
+	if (_operators.find(client.getNick()) != _operators.end())
+		_operators.erase(client.getNick());
 	if (_users.empty())
 		closeChannel();
 }
 
-void Channel::addOperator(Client *client)
+void Channel::addOperator(Client client)
 {
-	if (_operators.find(client->getNick()) != _operators.end())
-		{std::cerr << "Cannot make " + client->getNick() + " an operator: User is already an operator in this channel" << std::endl; return ;}
-	_operators[client->getNick()] = client;
-	client->receiveMsg("You are now an operator on " + _name);
+	if (_operators.find(client.getNick()) != _operators.end())
+		{std::cerr << "Cannot make " + client.getNick() + " an operator: User is already an operator in this channel" << std::endl; return ;}
+	_operators[client.getNick()] = client;
+	client.receiveMsg("You are now an operator on " + _name);
 }
 
-void Channel::removeOperator(Client *client)
+void Channel::removeOperator(Client client)
 {
-	if (_operators.find(client->getNick()) == _operators.end())
-		{std::cerr << "Cannot remove operator rights of " + client->getNick() + ": User is not an operator in this channel" << std::endl; return ;}
+	if (_operators.find(client.getNick()) == _operators.end())
+		{std::cerr << "Cannot remove operator rights of " + client.getNick() + ": User is not an operator in this channel" << std::endl; return ;}
 	if (_operators.size() == 1)
-		{std::cerr << "Cannot remove operator rights of " + client->getNick() + ": User is the last operator in channel" << std::endl; return ;} //sollen wir ?
-	_operators.erase(client->getNick());
-	client->receiveMsg("You are no longer an operator on " + _name);
+		{std::cerr << "Cannot remove operator rights of " + client.getNick() + ": User is the last operator in channel" << std::endl; return ;} //sollen wir ?
+	_operators.erase(client.getNick());
+	client.receiveMsg("You are no longer an operator on " + _name);
 }
 void Channel::setTopic(const std::string &topic)
 {
@@ -67,18 +67,18 @@ const int Channel::getUserLimit() const
 	return _userLimit;
 }
 
-void Channel::inviteUser(Client *invitedClient, Client *inviter)
+void Channel::inviteUser(Client invitedClient, Client inviter)
 {
-	if (_users.find(inviter->getNick()) == _users.end())
-		throw std::runtime_error("Cannot invite " + invitedClient->getNick() + ": Inviting User " + inviter->getNick() + " is not in channel");
-	if (this->isModeSet(INVITE_ONLY) && _operators.find(inviter->getNick()) == _operators.end())
-		throw std::runtime_error("Cannot invite " + invitedClient->getNick() + ": Channel is set to invite-only, but Inviting User " + inviter->getNick() + " is not an operator");
-	if (_users.find(invitedClient->getNick()) != _users.end())
-		throw std::runtime_error("Cannot invite " + invitedClient->getNick() + ": User is already in channel");
-	if (_invitedUsers.find(invitedClient->getNick()) != _invitedUsers.end())
-		throw std::runtime_error("Cannot invite " + invitedClient->getNick() + ": User is already invited");
-	_invitedUsers[invitedClient->getNick()] = invitedClient;
-	invitedClient->receiveMsg("You have been invited to the channel " + this->_name + " by " + inviter->getNick());
+	if (_users.find(inviter.getNick()) == _users.end())
+		throw std::runtime_error("Cannot invite " + invitedClient.getNick() + ": Inviting User " + inviter.getNick() + " is not in channel");
+	if (this->isModeSet(INVITE_ONLY) && _operators.find(inviter.getNick()) == _operators.end())
+		throw std::runtime_error("Cannot invite " + invitedClient.getNick() + ": Channel is set to invite-only, but Inviting User " + inviter.getNick() + " is not an operator");
+	if (_users.find(invitedClient.getNick()) != _users.end())
+		throw std::runtime_error("Cannot invite " + invitedClient.getNick() + ": User is already in channel");
+	if (_invitedUsers.find(invitedClient.getNick()) != _invitedUsers.end())
+		throw std::runtime_error("Cannot invite " + invitedClient.getNick() + ": User is already invited");
+	_invitedUsers[invitedClient.getNick()] = invitedClient;
+	invitedClient.receiveMsg("You have been invited to the channel " + this->_name + " by " + inviter.getNick());
 }
 
 void Channel::setMode(int mode, std::string value, bool set)
@@ -95,9 +95,9 @@ bool Channel::isModeSet(int mode) const
 	return (_modes[mode].first);
 }
 
-bool Channel::isUserInvited(Client *client) const
+bool Channel::isUserInvited(Client client) const
 {
-	if (_invitedUsers.find(client->getNick()) != _invitedUsers.end())
+	if (_invitedUsers.find(client.getNick()) != _invitedUsers.end())
 		return true;
 	return false;
 }
@@ -120,28 +120,28 @@ const std::string &Channel::getKey() const
 
 void Channel::systemMessage(const std::string &message)
 {
-	std::for_each(_users.begin(), _users.end(), [message](Client * user) {
-		user->receiveMsg(message);
+	std::for_each(_users.begin(), _users.end(), [message](Client user) {
+		user.receiveMsg(message);
 	});
 }
 
-void Channel::broadcastMessage(const std::string &message, Client *sender)
+void Channel::broadcastMessage(const std::string &message, Client sender)
 {
-	std::string newMessage = "<" + sender->getNick() + "> " + message;
+	std::string newMessage = "<" + sender.getNick() + "> " + message;
 	if (_users.size() == 1)
 		return ;
 	if (_users.size() == 2)
 	{
 		if (_users.begin()->second != sender)
-			_users.begin()->second->receiveMsg(newMessage);
+			_users.begin()->second.receiveMsg(newMessage);
 		else
-			(++_users.begin())->second->receiveMsg(newMessage);
+			(++_users.begin())->second.receiveMsg(newMessage);
 		return ;
 	}
 	for (auto it = _users.begin(); it != _users.end(); it++)
 	{
 		if (it->second != sender)
-			it->second->receiveMsg(newMessage);
+			it->second.receiveMsg(newMessage);
 	}
 }
 
@@ -150,18 +150,18 @@ const std::string& Channel::getName() const
 	return _name;
 }
 
-Client * Channel::getUser(std::string user) const
+Client *Channel::getUser(std::string user) const
 {
 	if (_users.find(user) == _users.end())
 		return NULL;
-	return _users.at(user);
+	return &_users.at(user);
 }
 
-Client * Channel::getOperator(std::string operatr) const
+Client *Channel::getOperator(std::string operatr) const
 {
 	if (_operators.find(operatr) == _operators.end())
 		return NULL;
-	return _operators.at(operatr);
+	return &(_operators.at(operatr));
 }
 
 std::string Channel::getModestring() const
