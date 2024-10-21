@@ -187,3 +187,8 @@ void Server::sendResponse(std::string message, int fd)
 	if (send(fd, message.c_str(), message.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
+
+// forward_list<std::string>	Server::parseCommand(const std::string command)
+// {
+// 	forward_list<std::string>
+// }

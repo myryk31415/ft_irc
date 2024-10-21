@@ -13,6 +13,7 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <sstream>
+#include <forward_list>
 #include "ft_irc.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
@@ -46,7 +47,7 @@ class Server
 		template <typename... Args>
 		void		sendError(std::string numeric, int fd, std::string client, Args... args);
 		void		sendResponse(std::string message, int fd);
-
+		// void		parseCommand(const std::string command);
 
 		void		operatorPriv(bool sign, Channel* channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd);
 		//Commands
