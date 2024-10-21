@@ -24,23 +24,23 @@ class Server
 		int _port;
 		int _server_socket_fd;
 		std::vector<struct pollfd> _sockets;
-		std::unordered_map<std::string, Client *> _clients;
-		std::unordered_map<std::string, Channel *> _channels;
+		std::unordered_map<std::string, Client> _clients;
+		std::unordered_map<std::string, Channel> _channels;
 		std::string			_name;
 	public:
 		Server(int port);
 		~Server();
 
-		static void	signal_handler(int signal);
+		static void	signalHandler(int signal);
 
 		void		init();
-		void		setup_server_socket();
+		void		setupServerSocket();
 		void		shutdown();
-		void		clear_client(int fd);
+		void		clearClient(int fd);
 		void		poll();
-		void		accept_client();
+		void		acceptClient();
 		Client *	getClient(int fd);
-		void		receive_data(int fd);
+		void		receiveData(int fd);
 		// void		sendError(std::string numeric, std::string client, std::string msg, int fd);
 		// void		sendError(std::string numeric, std::string client, std::string channel, std::string msg, int fd);
 		template <typename... Args>
@@ -48,7 +48,7 @@ class Server
 		void		sendResponse(std::string message, int fd);
 
 
-		void		operator_priv(bool sign, Channel* channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd);
+		void		operatorPriv(bool sign, Channel* channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd);
 		//Commands
 		void KICK(std::string cmd, int fd);
 		void MODE(std::string cmd, int fd);

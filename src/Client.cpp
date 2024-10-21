@@ -9,17 +9,17 @@ Client::~Client()
 {
 }
 
-int		Client::get_fd() const
+int		Client::getFd() const
 {
 	return (_fd);
 }
 
-void	Client::set_fd(int fd)
+void	Client::setFd(int fd)
 {
 	_fd = fd;
 }
 
-void	Client::set_ip_addr(const std::string ip_addr)
+void	Client::setIpAddr(const std::string ip_addr)
 {
 	_ip_addr = ip_addr;
 }

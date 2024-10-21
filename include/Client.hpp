@@ -17,9 +17,9 @@ class Client
 		Client();
 		~Client();
 
-		int		get_fd() const;
-		void	set_fd(int fd);
-		void	set_ip_addr(const std::string ip_addr);
+		int		getFd() const;
+		void	setFd(int fd);
+		void	setIpAddr(const std::string ip_addr);
 		const std::string& getNick(void) const;
 		void	setNick(const std::string &new_nick) const;
 		const std::string& getUsername(void) const;

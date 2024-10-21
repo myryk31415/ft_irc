@@ -4,6 +4,7 @@
 #include <cctype>
 #include <algorithm>
 #include <bitset>
+#include <vector>
 #include "Client.hpp"
 
 enum ChannelModes {

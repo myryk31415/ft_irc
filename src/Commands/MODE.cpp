@@ -60,7 +60,7 @@ void channel_key(bool sign, Channel* channel, std::string &modeReport)
 
 }
 
-void Server::operator_priv(bool sign, Channel* channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd)
+void Server::operatorPriv(bool sign, Channel* channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd)
 {
 	std::string test = *args_it;
 	if (test.empty())
@@ -81,7 +81,7 @@ void Server::operator_priv(bool sign, Channel* channel, std::string &modeReport,
 
 void user_limit(bool sign, Channel* channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd)
 {
-	
+
 }
 
 void Server::MODE(std::string cmd, int fd)
@@ -123,7 +123,7 @@ void Server::MODE(std::string cmd, int fd)
 		if (*pos == 'k')
 			channel_key(sign, channel, modeReport);
 		if (*pos =='o')
-			operator_priv(sign, channel, modeReport, args_it, argsReport, fd);
+			operatorPriv(sign, channel, modeReport, args_it, argsReport, fd);
 		if (*pos == 'l')
 			user_limit(sign, channel, modeReport, args_it, argsReport, fd);
 	}

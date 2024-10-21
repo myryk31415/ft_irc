@@ -7,7 +7,7 @@ Server::Server(int port) : _port(port) {}
 
 Server::~Server() {}
 
-void	Server::signal_handler(int signal)
+void	Server::signalHandler(int signal)
 {
 	std::cout << std::endl << "Signal " << signal << " received!" << std::endl;
 	_signal = true;
@@ -20,14 +20,14 @@ void	Server::signal_handler(int signal)
 void	Server::init()
 {
 	try {
-		signal(SIGINT, signal_handler);
-		signal(SIGQUIT, signal_handler);
-		// if (signal(SIGINT, signal_handler) == SIG_ERR) // "ctrl + c"
+		signal(SIGINT, signalHandler);
+		signal(SIGQUIT, signalHandler);
+		// if (signal(SIGINT, signalHandler) == SIG_ERR) // "ctrl + c"
 		// 	throw(std::runtime_error("setting signal handler failed"));
-		// if (signal(SIGQUIT, signal_handler) == SIG_ERR); // "ctrl + \"
+		// if (signal(SIGQUIT, signalHandler) == SIG_ERR); // "ctrl + \"
 		// 	throw(std::runtime_error("setting signal handler failed"));
 
-		setup_server_socket();
+		setupServerSocket();
 		std::cout << GREEN << "Server " << _server_socket_fd << " started" << RESET << std::endl;
 		std::cout << "Waiting for connections" << std::endl;
 	}
@@ -39,7 +39,7 @@ void	Server::init()
 	}
 }
 
-void	Server::setup_server_socket()
+void	Server::setupServerSocket()
 {
 	_server_socket_fd = socket(AF_INET, SOCK_STREAM, 0); // create IPv4 TCP socket
 	if (_server_socket_fd == -1)
@@ -71,8 +71,8 @@ void	Server::shutdown()
 	std::cout << RED;
 	for(auto iter = _clients.begin(); iter != _clients.end(); iter++)
 	{
-		std::cout << "Disconnecting client " << (*iter).get_fd() << std::endl;
-		close((*iter).get_fd());
+		std::cout << "Disconnecting client " << (*iter).second.getFd() << std::endl;
+		close((*iter).second.getFd());
 	}
 	if (_server_socket_fd != -1)
 	{
@@ -93,16 +93,16 @@ void	Server::poll()
 			if ((*iter).revents & POLLIN)
 			{
 				if ((*iter).fd == _server_socket_fd)
-					accept_client();
+					acceptClient();
 				else
-					receive_data((*iter).fd);
+					receiveData((*iter).fd);
 			}
 		}
 	}
 	shutdown();
 }
 
-void	Server::accept_client()
+void	Server::acceptClient()
 {
 	Client		client;
 	sockaddr_in	addr;
@@ -120,15 +120,15 @@ void	Server::accept_client()
 	client_poll.events = POLLIN;
 	client_poll.revents = 0;
 
-	client.set_fd(client_fd);
-	client.set_ip_addr(inet_ntoa(addr.sin_addr));
-	_clients.push_back(client);
+	client.setFd(client_fd);
+	client.setIpAddr(inet_ntoa(addr.sin_addr));
+	_clients[client.getNick()] = client;
 	_sockets.push_back(client_poll);
 
 	std::cout << GREEN << "Client " << client_fd << " connected" << RESET << std::endl;
 }
 
-void	Server::receive_data(int fd)
+void	Server::receiveData(int fd)
 {
 	char	buff[1024];
 	memset(buff, 0, sizeof(buff));
@@ -138,20 +138,20 @@ void	Server::receive_data(int fd)
 	if (bytes <= 0)
 	{
 		std::cout << RED << "Client " << fd << " has disconnected" << std::endl;
-		clear_client(fd);
+		clearClient(fd);
 		close(fd);
 	} else {
 		std::cout << MAGENTA << "Client " << fd << " data: " << RESET << buff << std::endl;
 	}
 }
 
-void	Server::clear_client(int fd)
+void	Server::clearClient(int fd)
 {
 	for (auto iter = _sockets.begin(); iter != _sockets.end(); iter++)
 		if ((*iter).fd == fd)
 			_sockets.erase(iter);
 	for (auto iter = _clients.begin(); iter != _clients.end(); iter++)
-		if ((*iter).get_fd() == fd)
+		if ((*iter).second.getFd() == fd)
 			_clients.erase(iter);
 }
 
@@ -177,7 +177,7 @@ void Server::sendError(std::string numeric, int fd, std::string client, Args... 
 
 	((ss << args << " "), ...);
 	ss <<"\r\n";
-	std::string out = ss.str()
+	std::string out = ss.str();
 	if (send(fd, out.c_str(), out.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
