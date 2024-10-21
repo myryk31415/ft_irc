@@ -26,7 +26,7 @@ class Channel
 		std::unordered_map<std::string, Client > _users;
 		std::unordered_map<std::string, Client > _operators;
 		std::unordered_map<std::string, Client > _invitedUsers;
-		std::vector<std::pair<bool, std::string>> _modes{COUNT};
+		std::vector<std::pair<bool, std::string> > _modes{COUNT};
 		int _userLimit;
 		std::string _key;
 
@@ -34,10 +34,10 @@ class Channel
 		Channel(const std::string &channelName);
 		Channel(const std::string &channelName, const std::string &key);
 		~Channel();
-		void addUser(Client client);
-		void removeUser(Client client);
-		void addOperator(Client client);
-		void removeOperator(Client client);
+		void addUser(Client &client);
+		void removeUser(Client &client);
+		void addOperator(Client &client);
+		void removeOperator(Client &client);
 
 		//Topic Handling
 		void setTopic(const std::string &topic);
@@ -50,8 +50,8 @@ class Channel
 		std::string getModesvalues() const;
 
 		//Invite Handling
-		void inviteUser(Client invitedClient, Client inviter);
-		bool isUserInvited(Client client) const;
+		void inviteUser(Client &invitedClient, Client &inviter);
+		bool isUserInvited(Client &client) const;
 
 		//key Handling
 		void setKey(const std::string &key);
@@ -60,10 +60,10 @@ class Channel
 		//Getters
 		const std::string &getName() const;
 		const int getUserLimit() const;
-		Client *getUser(std::string user) const;
-		Client *getOperator(std::string operatr) const;
+		Client *getUser(std::string user);
+		Client *getOperator(std::string operatr);
 		//Messages
-		void broadcastMessage(const std::string &message, Client sender);
+		void broadcastMessage(const std::string &message, Client &sender);
 		void systemMessage(const std::string &message);
 
 		void closeChannel(void);
