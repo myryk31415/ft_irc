@@ -5,8 +5,9 @@ Channel::Channel(const std::string &channelName) : _name(channelName), _modes(5)
 {
 }
 
-Channel::Channel(const std::string &channelName, const std::string &key) : _name(channelName), _key(key), _modes(5)
+Channel::Channel(const std::string &channelName, const std::string &key) : _name(channelName), _modes(5)
 {
+	setMode(KEY, key, true);
 }
 
 Channel::~Channel()
@@ -17,7 +18,7 @@ void Channel::addUser(Client &client)
 {
 	if (_users.find(client.getNick()) != _users.end())
 		throw std::runtime_error("User is already in channel");
-	if (_users.size() >= _userLimit)
+	if (isModeSet(USER_LIMIT) && std::atoi(_modes[USER_LIMIT].second.c_str()) <= _users.size())
 		throw std::runtime_error("Channel is full");
 	_users[client.getNick()] = client;
 	systemMessage(client.getNick() + " has joined the channel");
@@ -62,10 +63,6 @@ const std::string &Channel::getTopic() const
 	return _topic;
 }
 
-const int Channel::getUserLimit() const
-{
-	return _userLimit;
-}
 
 void Channel::inviteUser(Client &invitedClient, Client &inviter)
 {
@@ -100,22 +97,6 @@ bool Channel::isUserInvited(Client &client) const
 	if (_invitedUsers.find(client.getNick()) != _invitedUsers.end())
 		return true;
 	return false;
-}
-
-void Channel::setKey(const std::string &key)
-{
-	if (std::any_of(key.begin(), key.end(), ::isspace) == true)
-		throw std::runtime_error("Couldnt set key " + key + " for channel: No Whitespaces allowed in channelkeys");
-	if (!key.compare(_key))
-		throw std::runtime_error("Couldnt set key " + key + " for channel: Key already set to this value");
-	_key = key;
-}
-
-const std::string &Channel::getKey() const
-{
-	if (_key.empty())
-		throw std::runtime_error("No key set yet for " + _name);
-	return _key;
 }
 
 void Channel::systemMessage(const std::string &message)
@@ -199,5 +180,5 @@ std::string Channel::getModesvalues() const
 
 void Channel::closeChannel()
 {
-	
+
 }
