@@ -160,7 +160,7 @@ void	Server::receiveData(int fd)
 		std::cout << MAGENTA << "Client " << fd << " data: " << RESET << buff << std::endl;
 		splitData(buff, cmd);
 		for (auto it = cmd.begin(); it != cmd.end(); it++)
-			parseCmd(*it);
+			parseCommand(*it);
 	}
 }
 
