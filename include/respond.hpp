@@ -11,8 +11,9 @@
 # define ERR_NOSUCHNICK(nick, user_nick) (": 401 " + nick + " " + user_nick + " :No such nick/channel" + CRLF)
 # define ERR_UMODEUNKOWNFLAG(nick) (": 501 " + nick + " :Unknown MODE flag" + CRLF)
 # define ERR_INVALIDMODEPARAM(nick, target, mode, param, description) (": 696 " + nick + " " + target + " " + mode + " " + param + " :" + description + CRLF)
-
+# define ERR_USERONCHANNEL(nick, user_nick, channel) (": 443 " + nick + " " + user_nick + " #" + channel + " :is already on channel" + CRLF)
 
 //Repliies
 # define RPL_CHANNELMODEIS(nick, channel, modes, mode_values) (": 324 " + nick + " #" + channel + " " + modes + " " + mode_values + CRLF)
 # define RPL_CHANGEDMODE(host, channel, modes, args) (":" + host + " MODE #" + channel + " " + modes + " " + args)
+# define RPL_INVITING(nick, user_nick, channel) (": 341 "+ nick + " " + user_nick + " " + channel + CRLF)
