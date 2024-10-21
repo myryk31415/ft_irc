@@ -54,7 +54,7 @@ void	Client::leaveChannel(Channel *channel)
 	channel->removeUser(*this);
 }
 
-void	receiveMsg(const std::string &msg)
+void	Client::receiveMsg(const std::string &msg)
 {
 
 }
