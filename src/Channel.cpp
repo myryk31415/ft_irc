@@ -95,7 +95,7 @@ bool Channel::isModeSet(int mode) const
 	return (_modes[mode].first);
 }
 
-bool Channel::isUserInvited(Client client) const
+bool Channel::isUserInvited(Client &client) const
 {
 	if (_invitedUsers.find(client.getNick()) != _invitedUsers.end())
 		return true;
@@ -120,8 +120,8 @@ const std::string &Channel::getKey() const
 
 void Channel::systemMessage(const std::string &message)
 {
-	std::for_each(_users.begin(), _users.end(), [message](Client &user) {
-		user.receiveMsg(message);
+	std::for_each(_users.begin(), _users.end(), [message](auto pair) {
+		pair.second.receiveMsg(message);
 	});
 }
 
