@@ -52,6 +52,7 @@ class Server
 
 		std::vector<std::string>	parseCommand(const std::string command);
 		//Commands
-		void KICK(std::string cmd, int fd);
-		void MODE(std::string cmd, int fd);
+		void	KICK(std::vector<std::string> cmd, int fd);
+		void	MODE(std::vector<std::string> cmd, int fd);
+		void	INVITE(std::vector<std::string> cmd, int fd);
 };

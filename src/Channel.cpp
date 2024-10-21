@@ -66,16 +66,7 @@ const std::string &Channel::getTopic() const
 
 void Channel::inviteUser(Client &invitedClient, Client &inviter)
 {
-	if (_users.find(inviter.getNick()) == _users.end())
-		throw std::runtime_error("Cannot invite " + invitedClient.getNick() + ": Inviting User " + inviter.getNick() + " is not in channel");
-	if (this->isModeSet(INVITE_ONLY) && _operators.find(inviter.getNick()) == _operators.end())
-		throw std::runtime_error("Cannot invite " + invitedClient.getNick() + ": Channel is set to invite-only, but Inviting User " + inviter.getNick() + " is not an operator");
-	if (_users.find(invitedClient.getNick()) != _users.end())
-		throw std::runtime_error("Cannot invite " + invitedClient.getNick() + ": User is already in channel");
-	if (_invitedUsers.find(invitedClient.getNick()) != _invitedUsers.end())
-		throw std::runtime_error("Cannot invite " + invitedClient.getNick() + ": User is already invited");
 	_invitedUsers[invitedClient.getNick()] = invitedClient;
-	invitedClient.receiveMsg("You have been invited to the channel " + this->_name + " by " + inviter.getNick());
 }
 
 void Channel::setMode(int mode, std::string value, bool set)

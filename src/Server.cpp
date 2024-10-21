@@ -130,9 +130,23 @@ void	Server::acceptClient()
 	std::cout << GREEN << "Client " << client_fd << " connected" << RESET << std::endl;
 }
 
+void splitData(std::string data, std::vector<std::string> &cmd)
+{
+	std::istringstream	strm(data);
+	std::string			line;
+	while (std::getline(strm, line))
+	{
+		size_t pos = line.find_first_of("\r\n");
+		if(pos != std::string::npos)
+			line = line.substr(0, pos);
+		cmd.push_back(line);
+	}
+}
+
 void	Server::receiveData(int fd)
 {
 	char	buff[1024];
+	std::vector<std::string> cmd;
 	// memset(buff, 0, sizeof(buff));
 
 	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1, 0);
@@ -144,6 +158,9 @@ void	Server::receiveData(int fd)
 		close(fd);
 	} else {
 		std::cout << MAGENTA << "Client " << fd << " data: " << RESET << buff << std::endl;
+		splitData(buff, cmd);
+		for (auto it = cmd.begin(); it != cmd.end(); it++)
+			parseCmd(*it);
 	}
 }
 

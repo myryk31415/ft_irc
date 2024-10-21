@@ -1,47 +1,39 @@
 #include "Server.hpp"
 
-std::string splitCmdKick(std::string cmd, std::string &channel, std::vector<std::string>& usersToKick)
+std::string splitCmdKick(std::vector<std::string>& cmd, std::string &channel, std::vector<std::string>& usersToKick)
 {
 	size_t pos;
 	size_t comma_pos;
 	std::string reason;
-	pos = cmd.find_first_of(' ');
-	if (pos != std::string::npos)
-		cmd = cmd.substr(pos + 1);
-	pos = cmd.find_first_of(' ');
-	channel = cmd.substr(0, pos);
-	if (channel[0] == '#')
-		channel.erase(channel.begin());
-	cmd = cmd.substr(pos + 1);
-	pos = cmd.find_first_of(' ');
-	std::string substr = cmd.substr(0, pos);
-	while ((comma_pos = substr.find(',')) != std::string::npos)
+	std::string args = cmd[1];
+	while ((comma_pos = args.find(',')) != std::string::npos)
 	{
-		usersToKick.push_back(substr.substr(0, comma_pos));
-		substr = substr.substr(comma_pos + 1);
+		usersToKick.push_back(args.substr(0, comma_pos));
+		args = args.substr(comma_pos + 1);
 	}
-	usersToKick.push_back(substr);
-	cmd = cmd.substr(pos + 1);
-	if (!cmd.empty())
+	pos = args.find(' ');
+	usersToKick.push_back(args.substr(0, pos));
+	args = args.substr(pos + 1);
+	if (!args.empty())
 	{
-		if (cmd[0] == ':')
-			reason = cmd.substr(1);
+		if (args[0] == ':')
+			reason = args.substr(1);
 		else
-			reason = cmd.substr(0, cmd.find_first_of(' '));
+			reason = args.substr(0, args.find_first_of(' '));
 	}
 	if (reason.empty())
 		reason = "Kick because lol";
 	return reason;
 }
 
-void Server::KICK(std::string cmd, int fd)
+void Server::KICK(std::vector<std::string> cmd, int fd)
 {
 	std::vector<std::string> usersToKick;
-	std::string channel;
-	std::string reason = splitCmdKick(cmd, channel, usersToKick);
 	Client &sender = *getClient(fd);
-	if (usersToKick.empty() || channel.empty())
-		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), cmd), fd); return ;}
+	if (cmd.size() < 2)
+		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), (cmd.empty() ? "" : "KICK " + cmd[0])), fd); return ;}
+	std::string channel = cmd[0];
+	std::string reason = splitCmdKick(cmd, channel, usersToKick);
 	if (_channels.find(channel) != _channels.end())
 	{
 		Channel &curChannel = _channels[channel];
