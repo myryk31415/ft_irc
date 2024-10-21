@@ -110,7 +110,6 @@ void	Server::acceptClient()
 	socklen_t	len = sizeof(addr);
 
 	int	client_fd = accept(_server_socket_fd, (sockaddr *)&addr, &len);
-	perror("dies das irc");
 	if (client_fd == -1)
 		throw (std::runtime_error("accepting client failed"));
 

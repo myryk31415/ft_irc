@@ -14,6 +14,7 @@ class Client
 		std::string	_ip_addr;
 		std::string _nick;
 		std::string _username;
+		bool		auth;
 	public:
 		Client();
 		~Client();
