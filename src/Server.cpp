@@ -70,10 +70,10 @@ void	Server::setupServerSocket()
 void	Server::shutdown()
 {
 	std::cout << RED;
-	for(auto iter = _clients.begin(); iter != _clients.end(); iter++)
+	for (auto it = _clients.begin(); it != _clients.end(); it++)
 	{
-		std::cout << "Disconnecting client " << iter->second.getFd() << std::endl;
-		close(iter->second.getFd());
+		std::cout << "Disconnecting client " << it->second.getFd() << std::endl;
+		close(it->second.getFd());
 	}
 	if (_server_socket_fd != -1)
 	{
@@ -150,13 +150,16 @@ void	Server::receiveData(int fd)
 
 void	Server::clearClient(int fd)
 {
-	for (size_t i = 0; i < _sockets.size(); i++)
-		if (_sockets[i].fd == fd)
-			_sockets.erase(_sockets.begin() + i);
-	// for (size_t i = 0; i < _sockets.size(); i++)
-	for (auto i = _clients.begin(); i != _clients.end(); i++)
-		if (i->second.getFd() == fd)
-			_clients.erase(i);
+	for (auto it = _sockets.begin(); it != _sockets.end();)
+		if (it->fd == fd)
+			it = _sockets.erase(it);
+		else
+			it++;
+	for (auto it = _clients.begin(); it != _clients.end();)
+		if (it->second.getFd() == fd)
+			it = _clients.erase(it);
+		else
+			it++;
 }
 
 // void Server::sendError(std::string numeric, std::string client, std::string msg, int fd)
