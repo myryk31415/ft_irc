@@ -196,3 +196,8 @@ std::string Channel::getModesvalues() const
 		modestring += _modes[KEY].second;
 	return modestring;
 }
+
+void Channel::closeChannel()
+{
+	
+}
