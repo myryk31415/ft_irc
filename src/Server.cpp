@@ -89,14 +89,14 @@ void	Server::poll()
 	{
 		if (::poll(&_sockets[0], _sockets.size(), -1) == -1 && !_signal)
 			throw(std::runtime_error("polling failed"));
-		for (auto iter = _sockets.begin(); iter != _sockets.end(); iter++)
+		for (size_t i = 0; i < _sockets.size(); ++i)
 		{
-			if (iter->revents & POLLIN)
+			if (_sockets[i].revents & POLLIN)
 			{
-				if (iter->fd == _server_socket_fd)
+				if (_sockets[i].fd == _server_socket_fd)
 					acceptClient();
 				else
-					receiveData(iter->fd);
+					receiveData(_sockets[i].fd);
 			}
 		}
 	}
