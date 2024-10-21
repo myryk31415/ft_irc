@@ -13,7 +13,7 @@ Channel::~Channel()
 {
 }
 
-void Channel::addUser(Client client)
+void Channel::addUser(Client &client)
 {
 	if (_users.find(client.getNick()) != _users.end())
 		throw std::runtime_error("User is already in channel");
@@ -23,7 +23,7 @@ void Channel::addUser(Client client)
 	systemMessage(client.getNick() + " has joined the channel");
 }
 
-void Channel::removeUser(Client client)
+void Channel::removeUser(Client &client)
 {
 	if (_users.find(client.getNick()) == _users.end())
 		throw std::runtime_error("User is not in channel");
@@ -35,7 +35,7 @@ void Channel::removeUser(Client client)
 		closeChannel();
 }
 
-void Channel::addOperator(Client client)
+void Channel::addOperator(Client &client)
 {
 	if (_operators.find(client.getNick()) != _operators.end())
 		{std::cerr << "Cannot make " + client.getNick() + " an operator: User is already an operator in this channel" << std::endl; return ;}
@@ -43,7 +43,7 @@ void Channel::addOperator(Client client)
 	client.receiveMsg("You are now an operator on " + _name);
 }
 
-void Channel::removeOperator(Client client)
+void Channel::removeOperator(Client &client)
 {
 	if (_operators.find(client.getNick()) == _operators.end())
 		{std::cerr << "Cannot remove operator rights of " + client.getNick() + ": User is not an operator in this channel" << std::endl; return ;}
@@ -67,7 +67,7 @@ const int Channel::getUserLimit() const
 	return _userLimit;
 }
 
-void Channel::inviteUser(Client invitedClient, Client inviter)
+void Channel::inviteUser(Client &invitedClient, Client &inviter)
 {
 	if (_users.find(inviter.getNick()) == _users.end())
 		throw std::runtime_error("Cannot invite " + invitedClient.getNick() + ": Inviting User " + inviter.getNick() + " is not in channel");
@@ -120,19 +120,19 @@ const std::string &Channel::getKey() const
 
 void Channel::systemMessage(const std::string &message)
 {
-	std::for_each(_users.begin(), _users.end(), [message](Client user) {
+	std::for_each(_users.begin(), _users.end(), [message](Client &user) {
 		user.receiveMsg(message);
 	});
 }
 
-void Channel::broadcastMessage(const std::string &message, Client sender)
+void Channel::broadcastMessage(const std::string &message, Client &sender)
 {
 	std::string newMessage = "<" + sender.getNick() + "> " + message;
 	if (_users.size() == 1)
 		return ;
 	if (_users.size() == 2)
 	{
-		if (_users.begin()->second != sender)
+		if (_users.begin()->second.getNick() != sender.getNick())
 			_users.begin()->second.receiveMsg(newMessage);
 		else
 			(++_users.begin())->second.receiveMsg(newMessage);
@@ -140,7 +140,7 @@ void Channel::broadcastMessage(const std::string &message, Client sender)
 	}
 	for (auto it = _users.begin(); it != _users.end(); it++)
 	{
-		if (it->second != sender)
+		if (it->second.getNick() != sender.getNick())
 			it->second.receiveMsg(newMessage);
 	}
 }
@@ -150,18 +150,20 @@ const std::string& Channel::getName() const
 	return _name;
 }
 
-Client *Channel::getUser(std::string user) const
+Client *Channel::getUser(std::string user)
 {
-	if (_users.find(user) == _users.end())
+	auto it = _users.find(user);
+	if (it == _users.end())
 		return NULL;
-	return &_users.at(user);
+	return (&it->second);
 }
 
-Client *Channel::getOperator(std::string operatr) const
+Client *Channel::getOperator(std::string operatr)
 {
-	if (_operators.find(operatr) == _operators.end())
+	auto it = _operators.find(operatr);
+	if (it == _operators.end())
 		return NULL;
-	return &(_operators.at(operatr));
+	return (&it->second);
 }
 
 std::string Channel::getModestring() const
