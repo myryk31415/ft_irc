@@ -31,6 +31,7 @@ class Channel
 		std::string _key;
 
 	public:
+		Channel() {};
 		Channel(const std::string &channelName);
 		Channel(const std::string &channelName, const std::string &key);
 		~Channel();

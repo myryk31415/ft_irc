@@ -188,7 +188,16 @@ void Server::sendResponse(std::string message, int fd)
 		std::cerr << "send() failed" << std::endl;
 }
 
+Client*		Server::getClient(int fd)
+{
+	for (auto iter = _clients.begin(); iter != _clients.end(); iter++)
+		if ((*iter).second.getFd() == fd)
+			return & (*iter).second;
+	return NULL;
+}
+
 // forward_list<std::string>	Server::parseCommand(const std::string command)
 // {
 // 	forward_list<std::string>
 // }
+
