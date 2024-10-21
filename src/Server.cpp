@@ -123,7 +123,8 @@ void	Server::acceptClient()
 	client_poll.revents = 0;
 
 	client.setFd(client_fd);
-	client.setIpAddr(inet_ntoa(addr.sin_addr));
+	client.setNick(inet_ntoa(addr.sin_addr));
+	client.setIpAddr(client.getNick());
 	_clients[client.getNick()] = client;
 	_sockets.push_back(client_poll);
 
@@ -149,12 +150,13 @@ void	Server::receiveData(int fd)
 
 void	Server::clearClient(int fd)
 {
-	for (auto iter = _sockets.begin(); iter != _sockets.end(); iter++)
-		if ((*iter).fd == fd)
-			_sockets.erase(iter);
-	for (auto iter = _clients.begin(); iter != _clients.end(); iter++)
-		if ((*iter).second.getFd() == fd)
-			_clients.erase(iter);
+	for (size_t i = 0; i < _sockets.size(); i++)
+		if (_sockets[i].fd == fd)
+			_sockets.erase(_sockets.begin() + i);
+	// for (size_t i = 0; i < _sockets.size(); i++)
+	for (auto i = _clients.begin(); i != _clients.end(); i++)
+		if (i->second.getFd() == fd)
+			_clients.erase(i);
 }
 
 // void Server::sendError(std::string numeric, std::string client, std::string msg, int fd)
