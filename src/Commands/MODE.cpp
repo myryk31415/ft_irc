@@ -37,7 +37,7 @@ void addMode(std::string& modeReport, char toAdd, bool sign)
 	modeReport += toAdd;
 }
 
-void invite_only(bool sign, Channel &channel, std::string &modeReport)
+void inviteOnly(bool sign, Channel &channel, std::string &modeReport)
 {
 	if (sign)
 		channel.setMode(INVITE_ONLY, "", true);
@@ -46,7 +46,7 @@ void invite_only(bool sign, Channel &channel, std::string &modeReport)
 	addMode(modeReport, 'i', sign);
 }
 
-void topic_restict(bool sign, Channel &channel, std::string &modeReport)
+void topicRestrict(bool sign, Channel &channel, std::string &modeReport)
 {
 	if (sign)
 		channel.setMode(TOPIC_SETTABLE_BY_OPERATOR, "", true);
@@ -55,33 +55,65 @@ void topic_restict(bool sign, Channel &channel, std::string &modeReport)
 	addMode(modeReport, 't', sign);
 }
 
-void channel_key(bool sign, Channel &channel, std::string &modeReport)
+void Server::channelKey(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd)
 {
+	if (sign)
+	{
+		std::string key = *argsIt;
+		if (key.empty())
+			{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNick(), "(o)"), fd); return ;}
+		if (key.find_first_of(" \t\v") != std::string::npos)
+			{sendResponse(ERR_INVALIDMODEPARAM(getClient(fd)->getNick(), channel.getName(), "k", key, "Should be without Whitespaces"), fd); return ;}
+		channel.setMode(KEY, key, true);
+		argsReport += *argsIt;
+		argsIt++;
+		addMode(modeReport, 'k', sign);
+	}
+	else
+	{
+		if (channel.isModeSet(USER_LIMIT))
+			channel.setMode(USER_LIMIT, "", false);
+		addMode(modeReport, 'k', sign);
+	}
 
 }
 
-void Server::operatorPriv(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd)
+void Server::operatorPriv(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd)
 {
-	std::string test = *args_it;
+	std::string test = *argsIt;
 	if (test.empty())
 		{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNick(), "(o)"), fd); return ;}
-	if (_clients.find(*args_it) == _clients.end())
-		{sendResponse(ERR_NOSUCHNICK(getClient(fd)->getNick() ,*args_it), fd); return ;}
-	Client &user = _clients[*args_it];
-	if (!channel.getUser(*args_it))
-		{sendResponse(ERR_USERNOTINCHANNEL(getClient(fd)->getNick(), *args_it, channel.getName()), fd); return ;}
+	if (_clients.find(*argsIt) == _clients.end())
+		{sendResponse(ERR_NOSUCHNICK(getClient(fd)->getNick() ,*argsIt), fd); return ;}
+	Client &user = _clients[*argsIt];
+	if (!channel.getUser(*argsIt))
+		{sendResponse(ERR_USERNOTINCHANNEL(getClient(fd)->getNick(), *argsIt, channel.getName()), fd); return ;}
 	if (sign)
 		channel.addOperator(user);
 	else
 		channel.removeOperator(user);
-	argsReport += *args_it;
-	args_it++;
+	argsReport += *argsIt;
+	argsIt++;
 	addMode(modeReport, 'o', sign);
 }
 
-void user_limit(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd)
+void Server::userLimit(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd)
 {
+	if (sign)
+	{
+		std::string limit = *argsIt;
+		if (limit.empty())
+			{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNick(), "(o)"), fd); return ;}
+		if (limit.find_first_not_of("0123456789") != std::string::npos || std::atoi(limit.c_str()) <= 0)
+			{sendResponse(ERR_INVALIDMODEPARAM(getClient(fd)->getNick(), channel.getName(), "i", limit, "Should be a Int Number"), fd); return ;}
+		channel.setMode(USER_LIMIT, limit, true);
+		argsReport += *argsIt;
+		argsIt++;
+	}
+	else
+		channel.setMode(USER_LIMIT, "0", false);
 
+	addMode(modeReport, 'l', sign);
 }
 
 void Server::MODE(std::string cmd, int fd)
@@ -102,7 +134,7 @@ void Server::MODE(std::string cmd, int fd)
 	else
 		sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), cmd), fd);
 	getVars(target, modestring, params, cmd);
-	auto args_it = splitParams(params, modeArgs);
+	auto argsIt = splitParams(params, modeArgs);
 	if (!target.empty() || target[0] != '#' || _channels.find(target.substr(1)) == _channels.end())
 		{sendResponse(ERR_NOSUCHCHANNEL(sender.getNick(), target.substr(1)), fd); return;}
 	Channel &channel = _channels[target.substr(1)];
@@ -116,16 +148,18 @@ void Server::MODE(std::string cmd, int fd)
 	{
 		if (*pos == '+' || *pos == '-')
 			sign = (*pos == '+'); //if *pos == + then sign will be 1
-		if (*pos == 'i')
-			invite_only(sign, channel, modeReport);
-		if (*pos == 't')
-			topic_restict(sign, channel, modeReport);
-		if (*pos == 'k')
-			channel_key(sign, channel, modeReport);
-		if (*pos =='o')
-			operatorPriv(sign, channel, modeReport, args_it, argsReport, fd);
-		if (*pos == 'l')
-			user_limit(sign, channel, modeReport, args_it, argsReport, fd);
+		else if (*pos == 'i')
+			inviteOnly(sign, channel, modeReport);
+		else if (*pos == 't')
+			topicRestrict(sign, channel, modeReport);
+		else if (*pos == 'k')
+			channelKey(sign, channel, modeReport, argsIt, argsReport, fd);
+		else if (*pos =='o')
+			operatorPriv(sign, channel, modeReport, argsIt, argsReport, fd);
+		else if (*pos == 'l')
+			userLimit(sign, channel, modeReport, argsIt, argsReport, fd);
+		else
+			sendResponse(ERR_UMODEUNKOWNFLAG(sender.getNick()), fd);
 	}
-	channel.systemMessage(modeReport);
+	channel.systemMessage(RPL_CHANGEDMODE(sender.getUsername(), channel.getName(), modeReport, argsReport));
 }

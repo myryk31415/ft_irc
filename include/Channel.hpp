@@ -27,8 +27,6 @@ class Channel
 		std::unordered_map<std::string, Client > _operators;
 		std::unordered_map<std::string, Client > _invitedUsers;
 		std::vector<std::pair<bool, std::string> > _modes;
-		int _userLimit;
-		std::string _key;
 
 	public:
 		Channel() {};
@@ -53,10 +51,6 @@ class Channel
 		//Invite Handling
 		void inviteUser(Client &invitedClient, Client &inviter);
 		bool isUserInvited(Client &client) const;
-
-		//key Handling
-		void setKey(const std::string &key);
-		const std::string &getKey() const;
 
 		//Getters
 		const std::string &getName() const;

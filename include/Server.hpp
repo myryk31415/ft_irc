@@ -48,7 +48,8 @@ class Server
 		void		sendError(std::string numeric, int fd, std::string client, Args... args);
 		void		sendResponse(std::string message, int fd);
 		// void		parseCommand(const std::string command);
-
+		void		userLimit(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd);
+		void		channelKey(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd);
 		void		operatorPriv(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd);
 		//Commands
 		void KICK(std::string cmd, int fd);
