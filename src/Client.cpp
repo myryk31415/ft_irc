@@ -26,24 +26,32 @@ void	Client::setIpAddr(const std::string ip_addr)
 
 const std::string&	Client::getNick(void) const
 {
-
+	return _nick;
 }
 
-
-void	Client::setNick(const std::string &new_nick) const
+void	Client::setNick(const std::string &new_nick)
 {
-
+	_nick = new_nick;
 }
 
+const std::string& Client::getUsername(void) const
+{
+	return _username;
+}
+
+void	Client::setUsername(const std::string &new_username)
+{
+	_username = new_username;
+}
 
 void	Client::joinChannel(Channel *channel)
 {
-	channel->addUser(this);
+	channel->addUser(*this);
 }
 
 void	Client::leaveChannel(Channel *channel)
 {
-	channel->removeUser(this);
+	channel->removeUser(*this);
 }
 
 void	receiveMsg(const std::string &msg)

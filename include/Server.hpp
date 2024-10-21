@@ -39,7 +39,7 @@ class Server
 		void		clearClient(int fd);
 		void		poll();
 		void		acceptClient();
-		Client *	getClient(int fd);
+		Client*		getClient(int fd);
 		void		receiveData(int fd);
 		// void		sendError(std::string numeric, std::string client, std::string msg, int fd);
 		// void		sendError(std::string numeric, std::string client, std::string channel, std::string msg, int fd);
