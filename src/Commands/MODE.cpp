@@ -144,7 +144,7 @@ void Server::MODE(std::string cmd, int fd)
 		{sendResponse(RPL_CHANNELMODEIS(sender.getNick(), target.substr(1), channel.getModestring(), channel.getModesvalues()), fd); return ;}
 	if (!channel.getOperator(sender.getNick())) // check if sender has perms
 		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNick(), target.substr(1)), fd); return ;}
-	for (auto pos = modestring.begin(); pos != modestring.end(); pos)
+	for (auto pos = modestring.begin(); pos != modestring.end(); pos++)
 	{
 		if (*pos == '+' || *pos == '-')
 			sign = (*pos == '+'); //if *pos == + then sign will be 1
