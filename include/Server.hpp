@@ -48,7 +48,7 @@ class Server
 		void		sendResponse(std::string message, int fd);
 
 
-		void		operatorPriv(bool sign, Channel* channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd);
+		void		operatorPriv(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd);
 		//Commands
 		void KICK(std::string cmd, int fd);
 		void MODE(std::string cmd, int fd);

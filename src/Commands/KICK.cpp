@@ -39,29 +39,29 @@ void Server::KICK(std::string cmd, int fd)
 	std::vector<std::string> usersToKick;
 	std::string channel;
 	std::string reason = splitCmdKick(cmd, channel, usersToKick);
-	Client *sender = getClient(fd);
+	Client &sender = *getClient(fd);
 	if (usersToKick.empty() || channel.empty())
-		{sendResponse(ERR_NEEDMOREPARAMS(sender->getNick(), cmd), fd); return ;}
+		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), cmd), fd); return ;}
 	if (_channels.find(channel) != _channels.end())
 	{
-		Channel *curChannel = _channels[channel];
-		if (!curChannel->getUser(sender->getNick())) // check if sender is in channel
-			{sendResponse(ERR_NOTONCHANNEL(sender->getNick(), channel), fd); return ;}
-		if (!curChannel->getOperator(sender->getNick())) // check if sender has perms
-		{sendResponse(ERR_CHANOPRIVSNEEDED(sender->getNick(), channel), fd); return ;}
+		Channel &curChannel = _channels[channel];
+		if (!curChannel.getUser(sender.getNick())) // check if sender is in channel
+			{sendResponse(ERR_NOTONCHANNEL(sender.getNick(), channel), fd); return ;}
+		if (!curChannel.getOperator(sender.getNick())) // check if sender has perms
+		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNick(), channel), fd); return ;}
 		for (auto it = usersToKick.begin(); it != usersToKick.end(); it++) // Iterate through all users to kick
 		{
-				if (!curChannel->getUser(*it)) // check if user to kick is in channel
-					{sendResponse(ERR_USERNOTINCHANNEL(sender->getNick(), *it, channel), fd); continue;}
+				if (!curChannel.getUser(*it)) // check if user to kick is in channel
+					{sendResponse(ERR_USERNOTINCHANNEL(sender.getNick(), *it, channel), fd); continue;}
 				std::stringstream ss;
-				ss << ":" << sender->getNick() << "!" << curChannel->getUser(*it)->getUsername() << "@" << "localhost" << " KICK #" << curChannel->getName() << " " << curChannel->getUser(*it)->getNick() << " :" << reason;
-				curChannel->broadcastMessage(ss.str(), sender);
-				curChannel->removeUser(curChannel->getUser(*it));
-				if (curChannel->getOperator(*it))
-					curChannel->removeOperator(curChannel->getOperator(*it));
+				ss << ":" << sender.getNick() << "!" << curChannel.getUser(*it)->getUsername() << "@" << "localhost" << " KICK #" << curChannel.getName() << " " << curChannel.getUser(*it)->getNick() << " :" << reason;
+				curChannel.broadcastMessage(ss.str(), sender);
+				curChannel.removeUser(*curChannel.getUser(*it));
+				if (curChannel.getOperator(*it))
+					curChannel.removeOperator(*curChannel.getOperator(*it));
 				// If users count == 0
 		}
 	}
 	else
-		sendResponse(ERR_NOSUCHCHANNEL(sender->getNick(), channel), fd);
+		sendResponse(ERR_NOSUCHCHANNEL(sender.getNick(), channel), fd);
 }
