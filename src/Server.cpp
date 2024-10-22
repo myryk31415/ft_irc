@@ -219,15 +219,33 @@ Client*		Server::getClient(int fd)
 	return NULL;
 }
 
-std::vector<std::string>	Server::parseCommand(const std::string command)
+void	Server::parseCommand(const std::string command)
+{
+	std::string	cmd;
+	std::vector<std::string> args;
+	size_t	cmd_end = command.find_first_of(' ');
+	size_t	colon = command.find_first_of(':');
+
+	if (cmd_end == std::string::npos)
+		cmd_end = command.size();
+	cmd_end = std::min(colon, cmd_end);
+	cmd = command.substr(0, cmd_end);
+	args = parseArgs(command.substr(cmd_end, command.size() - 1));
+
+	std::cout << std::endl << "PARSED COMMAND:" << std::endl;
+	std::cout << '"' << cmd << '"' << std::endl;
+	std::cout << std::endl << "ARGS:" << std::endl;
+	for (auto it = args.begin(); it != args.end(); it++)
+		std::cout << '"' << *it << '"' << std::endl;
+	std::cout << std::endl;
+}
+
+std::vector<std::string>	Server::parseArgs(const std::string command_args)
 {
 	std::vector<std::string>	args;
 	size_t	colon;
-	std::stringstream obj(command);
+	std::stringstream obj(command_args);
 	std::string	temp;
-	// std::string cmd;
-	// size_t	space = command.find_first_of(' ');
-	// size_t	i = 0;
 
 	while (obj >> temp)
 	{
@@ -240,39 +258,8 @@ std::vector<std::string>	Server::parseCommand(const std::string command)
 		}
 		args.emplace_back(temp);
 	}
-	colon = command.find_first_of(':');
+	colon = command_args.find_first_of(':');
 	if (colon != std::string::npos)
-		args.emplace_back(command.substr(colon + 1, command.size() -1));
-
-	std::cout << std::endl << "PARSED COMMAND:" << std::endl;
-	for (auto it = args.begin(); it != args.end(); it++)
-		std::cout << '"' << *it << '"' << std::endl;
-	// while (i < colon && i < command.size())
-	// {
-	// 	i = (command.fin
-	// 	args.insert(args.end() - 1, command);
-	// }
-
-// 	if (space < colon)
-// 	{
-// 		cmd = command.substr(0, space);
-// 		i = space;
-// 	}
-// 	else if (colon != std::string::npos)
-// 	{
-// 		cmd = command.substr(0, colon);
-// 		i = colon;
-// 	}
-// 	space = command.substr(i, command.size() - 1).find_first_of(' ');
-// 	while (space < colon && space != std::string::npos)
-// 	{
-// 		args.push_back(command.substr(0, space));
-// 		i = space;
-// 		space = command.substr(i, command.size() - 1).find_first_of(' ');
-// 	}
-// 	if (colon != std::string::npos)
-// 		args.push_back(command.substr(i, colon));
-// 	args.push_back(command.substr(colon + 1, command.size() - 1));
+		args.emplace_back(command_args.substr(colon + 1, command_args.size() -1));
 	return args;
 }
-
