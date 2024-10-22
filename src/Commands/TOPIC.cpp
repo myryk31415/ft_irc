@@ -31,4 +31,5 @@ void Server::TOPIC(std::vector<std::string> cmd, int fd)
 	std::time_t t = std::time(nullptr);
 	newTopic.second = sender.getNick() + " " + std::to_string(t);
 	channel.setTopic(newTopic);
+	channel.systemMessage(": !" + sender.getUsername() + " TOPIC #" + targetChannel + " " + topic + CRLF);
 }

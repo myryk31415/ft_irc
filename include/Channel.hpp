@@ -54,12 +54,12 @@ class Channel
 
 		//Getters
 		const std::string &getName() const;
-		const int getUserLimit() const;
 		Client *getUser(std::string user);
 		Client *getOperator(std::string operatr);
+		int		getUserCount() const;
+
 		//Messages
 		void broadcastMessage(const std::string &message, Client &sender);
 		void systemMessage(const std::string &message);
 
-		void closeChannel(void);
 };

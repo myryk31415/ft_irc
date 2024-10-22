@@ -32,8 +32,6 @@ void Channel::removeUser(Client &client)
 	systemMessage(client.getNick() + " has left the channel");
 	if (_operators.find(client.getNick()) != _operators.end())
 		_operators.erase(client.getNick());
-	if (_users.empty())
-		closeChannel();
 }
 
 void Channel::addOperator(Client &client)
@@ -169,7 +167,8 @@ std::string Channel::getModesvalues() const
 	return modestring;
 }
 
-void Channel::closeChannel()
-{
 
+int Channel::getUserCount() const
+{
+	return _users.size();
 }
