@@ -166,6 +166,7 @@ void	Server::receiveData(int fd)
 
 void	Server::clearClient(int fd)
 {
+	close(fd);
 	for (auto it = _sockets.begin(); it != _sockets.end();)
 		if (it->fd == fd)
 			it = _sockets.erase(it);
