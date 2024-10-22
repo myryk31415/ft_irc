@@ -217,7 +217,7 @@ void	Server::parseCommand(const std::string command)
 		cmd_end = command.size();
 	cmd_end = std::min(colon, cmd_end);
 	cmd = command.substr(0, cmd_end);
-	args = parseArgs(command.substr(cmd_end, command.size() - 1));
+	args = parseArgs(command.substr(cmd_end));
 
 	std::cout << std::endl << "PARSED COMMAND:" << std::endl;
 	std::cout << '"' << cmd << '"' << std::endl;
@@ -247,6 +247,6 @@ std::vector<std::string>	Server::parseArgs(const std::string command_args)
 	}
 	colon = command_args.find_first_of(':');
 	if (colon != std::string::npos)
-		args.emplace_back(command_args.substr(colon + 1, command_args.size() -1));
+		args.emplace_back(command_args.substr(colon + 1));
 	return args;
 }
