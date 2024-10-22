@@ -119,7 +119,7 @@ void Server::MODE(std::vector<std::string> cmd, int fd)
 		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), ""), fd); return;}
 	auto cmdIt = cmd.begin();
 	target = *cmdIt++;
-	if (!target.empty() || target[0] != '#' || _channels.find(target.substr(1)) == _channels.end())
+	if (target.empty() || target[0] != '#' || _channels.find(target.substr(1)) == _channels.end())
 		{sendResponse(ERR_NOSUCHCHANNEL(sender.getNick(), target.substr(1)), fd); return;}
 	if (cmdIt != cmd.end())
 		modestring = *cmdIt++;
