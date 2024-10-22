@@ -17,3 +17,6 @@
 # define RPL_CHANNELMODEIS(nick, channel, modes, mode_values) (": 324 " + nick + " #" + channel + " " + modes + " " + mode_values + CRLF)
 # define RPL_CHANGEDMODE(host, channel, modes, args) (":" + host + " MODE #" + channel + " " + modes + " " + args)
 # define RPL_INVITING(nick, user_nick, channel) (": 341 "+ nick + " " + user_nick + " " + channel + CRLF)
+# define RPL_TOPIC(nick, channel, topic) (": 332 " + nick + " " + channel + " :" + topic + CRLF)
+# define RPL_NOTOPIC(nick, channel) (": 331 " + nick + " " +  channel + " :No topic is set"+ CRLF)
+# define RPL_TOPICWHOTIME(nick, channel, senderTime) (": 333 " + nick + " " + channel + " " + senderTime + CRLF)

@@ -26,6 +26,7 @@ void Server::TOPIC(std::vector<std::string> cmd, int fd)
 		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNick(), targetChannel.substr(1)), fd); return ;}
 	std::pair<std::string, std::string> newTopic;
 	newTopic.first = topic;
-	newTopic.second = sender.getNick() + " " + getUnixTimestamp();
+	std::time_t t = std::time(nullptr);
+	newTopic.second = sender.getNick() + " " + std::to_string(t);
 	channel.setTopic(newTopic);
 }
