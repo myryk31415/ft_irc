@@ -57,4 +57,5 @@ class Server
 		void	KICK(std::vector<std::string> cmd, int fd);
 		void	MODE(std::vector<std::string> cmd, int fd);
 		void	INVITE(std::vector<std::string> cmd, int fd);
+		void	TOPIC(std::vector<std::string> cmd, int fd)
 };

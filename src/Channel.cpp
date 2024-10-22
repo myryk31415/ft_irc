@@ -53,12 +53,12 @@ void Channel::removeOperator(Client &client)
 	_operators.erase(client.getNick());
 	client.receiveMsg("You are no longer an operator on " + _name);
 }
-void Channel::setTopic(const std::string &topic)
+void Channel::setTopic(const std::pair<std::string, std::string> &topic)
 {
 	_topic = topic;
 }
 
-const std::string &Channel::getTopic() const
+const std::pair<std::string, std::string> &Channel::getTopic() const
 {
 	return _topic;
 }

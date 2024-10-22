@@ -22,7 +22,7 @@ class Channel
 {
 	private:
 		std::string _name;
-		std::string _topic;
+		std::pair<std::string, std::string> _topic;
 		std::unordered_map<std::string, Client > _users;
 		std::unordered_map<std::string, Client > _operators;
 		std::unordered_map<std::string, Client > _invitedUsers;
@@ -39,8 +39,8 @@ class Channel
 		void removeOperator(Client &client);
 
 		//Topic Handling
-		void setTopic(const std::string &topic);
-		const std::string &getTopic() const;
+		void setTopic(const std::pair<std::string, std::string> &topic);
+		const std::pair<std::string, std::string> &getTopic() const;
 
 		//Modes Handling
 		void setMode(int mode, std::string value, bool set);
