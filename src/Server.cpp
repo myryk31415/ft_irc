@@ -178,19 +178,6 @@ void	Server::clearClient(int fd)
 			it++;
 }
 
-// void Server::sendError(std::string numeric, std::string client, std::string msg, int fd)
-// {
-// 	std::string errormsg = ":" + _name + " " + numeric + " " + client + " :" + msg + "\r\n";
-// 	if (send(fd, errormsg.c_str(), errormsg.size(), 0) == -1)
-// 		std::cerr << "send() failed" << std::endl;
-// }
-
-// void Server::sendError(std::string numeric, std::string client, std::string channel, std::string msg, int fd)
-// {
-// 	std::string errormsg = ":" + _name + " " + numeric + " " + client + " " + channel + " :" + msg + "\r\n";
-// 	if (send(fd, errormsg.c_str(), errormsg.size(), 0) == -1)
-// 		std::cerr << "send() failed" << std::endl;
-// }
 template <typename... Args>
 void Server::sendError(std::string numeric, int fd, std::string client, Args... args) // Pls write : infront of the msg
 {

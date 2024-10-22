@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+         #
+#    By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/10/21 13:17:51 by padam            ###   ########.fr        #
+#    Updated: 2024/10/21 20:19:00 by antonweizma      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ OBJ_DIRS = Commands
 
 SRCS_MAIN =	main.cpp Server.cpp Client.cpp Channel.cpp
 
-SRCS_CMD = KICK.cpp MODE.cpp
+SRCS_CMD = KICK.cpp MODE.cpp INVITE.cpp
 
 SRC_NAME =										$(SRCS_MAIN)	\
 			$(addprefix  Commands/,				$(SRCS_CMD))	\
