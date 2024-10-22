@@ -159,6 +159,8 @@ void	Server::receiveData(int fd)
 	} else {
 		std::cout << MAGENTA << "Client " << fd << " data: " << RESET << buff << std::endl;
 		splitData(buff, cmd);
+		if (cmd[0].compare("CAP LS 302"))
+			sendResponse("CAP * LS : ", fd);
 		for (auto it = cmd.begin(); it != cmd.end(); it++)
 			parseCommand(*it);
 	}
