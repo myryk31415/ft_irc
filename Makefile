@@ -6,7 +6,7 @@
 #    By: antonweizmann <antonweizmann@student.42    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/10/23 15:35:11 by antonweizma      ###   ########.fr        #
+#    Updated: 2024/10/23 17:27:59 by antonweizma      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ OBJ_DIRS = Commands
 
 SRCS_MAIN =	main.cpp Server.cpp Client.cpp Channel.cpp
 
-SRCS_CMD = KICK.cpp MODE.cpp INVITE.cpp JOIN.cpp PART.cpp TOPIC.cpp
+SRCS_CMD = KICK.cpp MODE.cpp INVITE.cpp JOIN.cpp PART.cpp TOPIC.cpp NICK.cpp PRIVMSG.cpp
 
 SRC_NAME =										$(SRCS_MAIN)	\
 			$(addprefix  Commands/,				$(SRCS_CMD))	\

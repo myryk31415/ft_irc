@@ -14,6 +14,7 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <sstream>
+#include <regex>
 #include "ft_irc.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
@@ -58,8 +59,8 @@ class Server
 		void		parseCommand(const std::string command, int fd);
 		std::vector<std::string>	parseArgs(const std::string command_args, int fd);
 		void		cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd);
-
-		void	finishRegistration(int fd);
+		bool		checkDuplicate(std::string nick);
+		void		finishRegistration(int fd);
 		//Commands
 		void	KICK(std::vector<std::string> cmd, int fd);
 		void	MODE(std::vector<std::string> cmd, int fd);
@@ -67,4 +68,5 @@ class Server
 		void	TOPIC(std::vector<std::string> cmd, int fd);
 		void	PART(std::vector<std::string> cmd, int fd);
 		void	JOIN(std::vector<std::string> cmd, int fd);
+		void	NICK(std::vector<std::string> cmd, int fd);
 };

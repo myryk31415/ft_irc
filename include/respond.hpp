@@ -16,6 +16,10 @@
 # define ERR_INVITEONLYCHAN(nick, channel) (": 473 " + nick + " " + channel + " :Cannot join channel (+i)" + CRLF)
 # define ERR_CHANNELISFULL(nick, channel) (": 471 " + nick + " " + channel + " :Cannot join channel (+l)" + CRLF)
 # define ERR_NOTREGISTERED(client) (": 451 " + client + " :You have not registered" + CRLF)
+# define ERR_NONICKNAMEGIVEN(nick) (": 431 " + nick + " :No nickname given" + CRLF)
+# define ERR_ERRONEUSNICKNAME(nick, falseNick) (": 432 " + nick + " " + falseNick + " :Erroneus nickname" + CRLF)
+# define ERR_NICKNAMEINUSE(nick, falseNick) (": 433 " + nick + " " + falseNick + " :Nickname already in use" + CRLF)
+
 //Repliies
 # define RPL_CHANNELMODEIS(nick, channel, modes, mode_values) (": 324 " + nick + " #" + channel + " " + modes + " " + mode_values + CRLF)
 # define RPL_CHANGEDMODE(host, channel, modes, args) (":" + host + " MODE #" + channel + " " + modes + " " + args+ CRLF)
