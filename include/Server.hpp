@@ -41,6 +41,7 @@ class Server
 		void		poll();
 		void		acceptClient();
 		Client*		getClient(int fd);
+		Client*		getClient(std::string nick);
 		void		receiveData(int fd);
 		// void		sendError(std::string numeric, std::string client, std::string msg, int fd);
 		// void		sendError(std::string numeric, std::string client, std::string channel, std::string msg, int fd);
@@ -55,6 +56,7 @@ class Server
 		std::vector<std::string>	parseArgs(const std::string command_args, int fd);
 		// void		cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd);
 
+		void	finishRegistration(int fd);
 		//Commands
 		void	KICK(std::vector<std::string> cmd, int fd);
 		void	MODE(std::vector<std::string> cmd, int fd);

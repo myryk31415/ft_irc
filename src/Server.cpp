@@ -201,16 +201,19 @@ void Server::sendResponse(std::string message, int fd)
 		std::cerr << "send() failed" << std::endl;
 }
 
-Client*		Server::getClient(int fd)
+Client*	Server::getClient(int fd)
 {
-	// naah
 	if (_clients.find(fd) == _clients.end())
 		return NULL;
 	return &_clients[fd];
-	// for (auto iter = _clients.begin(); iter != _clients.end(); iter++)
-	// 	if ((*iter).first == fd)
-	// 		return & (*iter).second;
-	// return NULL;
+}
+
+Client*	Server::getClient(std::string nick)
+{
+	for (auto iter = _clients.begin(); iter != _clients.end(); iter++)
+		if ((*iter).second.getNick() == nick)
+			return & (*iter).second;
+	return NULL;
 }
 
 void	Server::parseCommand(const std::string command, int fd)
@@ -278,3 +281,13 @@ std::vector<std::string>	Server::parseArgs(const std::string command_args, int f
 // 		if (!it->first.compare(cmd))
 // 			(this->*(it->second))(args, fd);
 // }
+
+void	Server::finishRegistration(int fd)
+{
+	std::string	msg;
+
+	sendResponse("RPL_WELCOME\r\n", fd);
+	sendResponse("RPL_YOURHOST\r\n", fd);
+	sendResponse("RPL_CREATED\r\n", fd);
+	sendResponse("RPL_MYINFO\r\n", fd);
+}
