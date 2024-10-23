@@ -37,6 +37,7 @@ class Channel
 		void removeUser(Client &client);
 		void addOperator(Client &client);
 		void removeOperator(Client &client);
+		std::string getAllUsers() const;
 
 		//Topic Handling
 		void setTopic(const std::pair<std::string, std::string> &topic);
@@ -47,6 +48,8 @@ class Channel
 		bool isModeSet(int mode) const;
 		std::string getModestring() const;
 		std::string getModesvalues() const;
+		std::string	getModeValue(int mode) const;
+		bool isChannelfull() const;
 
 		//Invite Handling
 		void inviteUser(Client &invitedClient, Client &inviter);
@@ -54,12 +57,12 @@ class Channel
 
 		//Getters
 		const std::string &getName() const;
-		const int getUserLimit() const;
 		Client *getUser(std::string user);
 		Client *getOperator(std::string operatr);
+		int		getUserCount() const;
+
 		//Messages
 		void broadcastMessage(const std::string &message, Client &sender);
 		void systemMessage(const std::string &message);
 
-		void closeChannel(void);
 };

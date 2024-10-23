@@ -13,14 +13,7 @@ std::string splitCmdKick(std::vector<std::string>& cmd, std::string &channel, st
 	}
 	pos = args.find(' ');
 	usersToKick.push_back(args.substr(0, pos));
-	args = args.substr(pos + 1);
-	if (!args.empty())
-	{
-		if (args[0] == ':')
-			reason = args.substr(1);
-		else
-			reason = args.substr(0, args.find_first_of(' '));
-	}
+	reason = cmd[2];
 	if (reason.empty())
 		reason = "Kick because lol";
 	return reason;
@@ -51,7 +44,8 @@ void Server::KICK(std::vector<std::string> cmd, int fd)
 				curChannel.removeUser(*curChannel.getUser(*it));
 				if (curChannel.getOperator(*it))
 					curChannel.removeOperator(*curChannel.getOperator(*it));
-				// If users count == 0
+				if (curChannel.getUserCount() == 0)
+					{_channels.erase(curChannel.getName()); return ;}
 		}
 	}
 	else
