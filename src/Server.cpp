@@ -267,6 +267,7 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 	std::vector<std::pair<std::string, void (Server::*)(std::vector<std::string>, int)>>	commands;
 	Client	&client = _clients[fd];
 
+	transform(cmd.begin(), cmd.end(), cmd.begin(), toupper);
 	if (client.getAuth() == 2)
 	{
 		if (cmd.compare("PASS") == std::string::npos)
