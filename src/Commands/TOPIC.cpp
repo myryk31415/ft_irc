@@ -20,7 +20,7 @@ void Server::TOPIC(std::vector<std::string> cmd, int fd)
 	{
 		std::pair<std::string, std::string> curTopic = channel.getTopic();
 		if (curTopic.first.empty())
-			sendResponse(RPL_NOTOPIC(sender.getNickname(), targetChannel), fd);
+			{sendResponse(RPL_NOTOPIC(sender.getNickname(), targetChannel), fd); return ;}
 		else
 			{sendResponse(RPL_TOPIC(sender.getNickname(), targetChannel, curTopic.first) + RPL_TOPICWHOTIME(sender.getNickname(), targetChannel, curTopic.second), fd); return;}
 	}
@@ -31,5 +31,5 @@ void Server::TOPIC(std::vector<std::string> cmd, int fd)
 	std::time_t t = std::time(nullptr);
 	newTopic.second = sender.getNickname() + " " + std::to_string(t);
 	channel.setTopic(newTopic);
-	channel.systemMessage(": !" + sender.getUsername() + " TOPIC #" + targetChannel + " " + topic + CRLF);
+	channel.systemMessage(": !" + sender.getUsername() + " TOPIC " + targetChannel + " " + topic + CRLF);
 }

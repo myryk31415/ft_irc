@@ -23,10 +23,11 @@ void	Server::NICK(std::vector<std::string> cmd, int fd)
 		{sendResponse(ERR_NONICKNAMEGIVEN(sender.getNickname()), fd); return ;}
 	if (checkDuplicate(cmd[0]))
 		{sendResponse(ERR_NICKNAMEINUSE(sender.getNickname(), cmd[0]), fd); return ;}
-	if (checkValidNick(cmd[0]))
+	if (!checkValidNick(cmd[0]))
 		{sendResponse(ERR_ERRONEUSNICKNAME(sender.getNickname(), cmd[0]), fd); return ;}
 	std::stringstream ss;
 	ss << ":" << sender.getNickname() << "!" << sender.getUsername() << "@" << "localhost" << " NICK " << cmd[0];
 	sender.receiveMsg(ss.str());
+	sender.setNickname(cmd[0]);
 }
 

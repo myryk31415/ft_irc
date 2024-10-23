@@ -11,11 +11,11 @@ void	Server::PRIVMSG(std::vector<std::string> cmd, int fd)
 	splitComma(cmd[0], targetsToSend);
 	for (auto &target : targetsToSend)
 	{
-		if (!getClient(target) && (target[0] == '#' && _channels.find(target.substr(1)) != _channels.end()))
+		if (!getClient(target) && !(target[0] == '#' && _channels.find(target.substr(1)) != _channels.end()))
 			{sendResponse(ERR_NOSUCHNICK(sender.getNickname(), target), fd); return ;}
 		if (getClient(target))
-			getClient(target)->receiveMsg(":" + sender.getNickname() + " NICK " + target + " :" + cmd[1]);
+			getClient(target)->receiveMsg(":" + sender.getNickname() + " PRIVMSG " + target + " :" + cmd[1]);
 		else
-			_channels[target.substr(1)].systemMessage( ":" + sender.getNickname() + "!" + sender.getUsername() + "@" + "localhost" + " PRIV #" + target.substr(1) + " :" + cmd[1]);
+			_channels[target.substr(1)].systemMessage( ":" + sender.getNickname() + "!" + sender.getUsername() + "@" + "localhost" + " PRIVMSG #" + target.substr(1) + " :" + cmd[1]);
 	}
 }

@@ -161,9 +161,9 @@ void	Server::receiveData(int fd)
 		std::cout << MAGENTA << "Client " << fd << " data: " << RESET << buff << std::endl;
 		splitData(buff, cmd);
 		if (!cmd[0].compare("CAP LS 302"))
-			sendResponse("CAP * LS :\r\n", fd);
-		if (!cmd[0].compare("CAP REQ :"))
-			sendResponse("CAP * ACK :\r\n", fd);
+			{sendResponse("CAP * LS :\r\n", fd); return ;}
+		// if (!cmd[0].compare("CAP REQ :"))
+		// 	sendResponse("CAP * ACK :\r\n", fd);
 		for (auto it = cmd.begin(); it != cmd.end(); it++)
 			parseCommand(*it, fd);
 	}
@@ -270,7 +270,7 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 	transform(cmd.begin(), cmd.end(), cmd.begin(), toupper);
 	if (client.getAuth() == 2)
 	{
-		if (cmd.compare("PASS") == std::string::npos)
+		if ((cmd != "PASS"))
 			sendResponse(ERR_NOTREGISTERED(_clients[fd].getNickname()), fd);
 		else
 			PASS(args, fd);
@@ -278,9 +278,9 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 	}
 	else if (client.getAuth() == 1)
 	{
-		if (cmd.compare("USER") != std::string::npos)
+		if ((cmd == "USER"))
 			USER(args, fd);
-		else if (cmd.compare("NICK") != std::string::npos)
+		else if ((cmd == "NICK"))
 			NICK(args, fd);
 		else
 			sendResponse(ERR_NOTREGISTERED(_clients[fd].getNickname()), fd);
@@ -321,7 +321,6 @@ void	Server::finishRegistration(int fd)
 	sendResponse(RPL_YOURHOST(client.getNickname(), _name, version), fd);
 	sendResponse(RPL_CREATED(client.getNickname(), "today"), fd);
 	sendResponse(RPL_MYINFO(client.getNickname(), _name, version, "itkol", "kl"), fd);
-	sendResponse(RPL_WELCOME(client.getNickname(), _name, client.getNickname()), fd);
 }
 
 void splitComma(std::string &cmd, std::vector<std::string> &split)

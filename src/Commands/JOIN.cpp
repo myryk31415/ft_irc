@@ -18,7 +18,7 @@ void Server::leaveAllChannels(Client &sender)
 
 void Server::JOIN(std::vector<std::string> cmd, int fd)
 {
-	std::vector<std::string> channels;
+	std::vector<std::string>channels;
 	std::vector<std::string> keys;
 	Client &sender = *getClient(fd);
 	if (!cmd.empty() && cmd[0] == "0")
@@ -45,7 +45,7 @@ void Server::JOIN(std::vector<std::string> cmd, int fd)
 				_channels.emplace(channelname, Channel(channelname));
 		}
 		Channel &curChannel = _channels[channelname];
-		if (curChannel.isModeSet(KEY) && itKeys != keys.end() && curChannel.getModeValue(KEY) != *itKeys)
+		if (curChannel.isModeSet(KEY) && (itKeys == keys.end() || curChannel.getModeValue(KEY) != *itKeys))
 			{sendResponse(ERR_BADCHANNELKEY(sender.getNickname(), channelname), fd); continue;}
 		if (curChannel.isModeSet(INVITE_ONLY) && !curChannel.isUserInvited(sender))
 			{sendResponse(ERR_INVITEONLYCHAN(sender.getNickname(), channelname), fd); continue;}

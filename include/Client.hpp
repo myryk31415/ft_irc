@@ -15,7 +15,7 @@ class Client
 		std::string _nick;
 		std::string _username;
 		std::string _realname;
-		int			_auth_stage; // 2 no pass; 1 no nick; 0 authenticated
+		int			_auth_stage{2}; // 2 no pass; 1 no nick; 0 authenticated
 	public:
 		Client();
 		~Client();
