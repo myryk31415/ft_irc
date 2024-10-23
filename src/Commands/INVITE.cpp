@@ -4,7 +4,7 @@ void Server::INVITE(std::vector<std::string> cmd, int fd)
 {
 	Client		&sender = *(getClient(fd));
 	if (cmd.size() < 2)
-		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), (cmd.empty() ? "" : "INVITE " + cmd[0])), fd); return;}
+		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), (cmd.empty() ? "INVITE" : "INVITE " + cmd[0])), fd); return;}
 	std::string target = cmd[0];
 	std::string channelnick = cmd[1].substr(1);
 	if (_channels.find(channelnick) == _channels.end())

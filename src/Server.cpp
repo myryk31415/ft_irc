@@ -322,3 +322,12 @@ void	Server::finishRegistration(int fd)
 	sendResponse(RPL_MYINFO(client.getNickname(), _name, version, "itkol", "kl"), fd);
 	sendResponse(RPL_WELCOME(client.getNickname(), _name, client.getNickname()), fd);
 }
+
+void splitComma(std::string &cmd, std::vector<std::string> &split)
+{
+	std::istringstream iss(cmd);
+	std::string line;
+	while(std::getline(iss, line, ','))
+		if (!line.empty())
+			split.push_back(line);
+}

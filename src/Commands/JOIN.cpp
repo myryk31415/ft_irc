@@ -1,15 +1,5 @@
 # include "Server.hpp"
 
-
-void splitComma(std::string &cmd, std::vector<std::string> &split)
-{
-	std::istringstream iss(cmd);
-	std::string line;
-	while(std::getline(iss, line, ','))
-		if (!line.empty())
-			split.push_back(line);
-}
-
 void Server::leaveAllChannels(Client &sender)
 {
 	for (auto it = _channels.begin(); it != _channels.end();)
@@ -34,7 +24,7 @@ void Server::JOIN(std::vector<std::string> cmd, int fd)
 	if (!cmd.empty() && cmd[0] == "0")
 		{leaveAllChannels(sender); return ;}
 	if (cmd.size() < 1)
-		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), (cmd.empty() ? "JOIN" : "JOIN " + cmd[0])), fd); return ;}
+		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), (cmd.empty() ? "JOIN" : "JOIN " + cmd[0])), fd); return ;}
 	splitComma(cmd[0], channels);
 	if (cmd.size() == 2)
 		splitComma(cmd[1], keys);

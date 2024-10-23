@@ -68,9 +68,10 @@ class Server
 		void	TOPIC(std::vector<std::string> cmd, int fd);
 		void	PART(std::vector<std::string> cmd, int fd);
 		void	JOIN(std::vector<std::string> cmd, int fd);
-		void	PASS(std::vector<std::string> cmd, int fd);
 		void	NICK(std::vector<std::string> cmd, int fd);
 		void	USER(std::vector<std::string> cmd, int fd);
 		void	PASS(std::vector<std::string> cmd, int fd);
 		void	PRIVMSG(std::vector<std::string> cmd, int fd);
 };
+
+void splitComma(std::string &cmd, std::vector<std::string> &split);

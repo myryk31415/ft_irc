@@ -116,7 +116,7 @@ void Server::MODE(std::vector<std::string> cmd, int fd)
 	std::string modeReport;
 	std::string argsReport;
 	if (cmd.empty())
-		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), "MODE"), fd); return;}
+		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), "MODE"), fd); return;}
 	auto cmdIt = cmd.begin();
 	target = *cmdIt++;
 	if (target.empty() || target[0] != '#' || _channels.find(target.substr(1)) == _channels.end())
