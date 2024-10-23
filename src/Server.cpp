@@ -233,7 +233,7 @@ void	Server::parseCommand(const std::string command, int fd)
 	for (auto it = args.begin(); it != args.end(); it++)
 		std::cout << '"' << *it << '"' << std::endl;
 	std::cout << std::endl;
-	// cmdDecide(cmd, args, fd);
+	cmdDecide(cmd, args, fd);
 }
 
 std::vector<std::string>	Server::parseArgs(const std::string command_args, int fd)
@@ -259,7 +259,8 @@ std::vector<std::string>	Server::parseArgs(const std::string command_args, int f
 		args.emplace_back(command_args.substr(colon + 1));
 	return args;
 }
-#define CMD_PAIR(cmd) commands.push_back(std::make_pair(#cmd, cmd));
+
+#define CMD_PAIR(cmd) commands.push_back(std::make_pair(#cmd, &Server::cmd));
 
 void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd)
 {
