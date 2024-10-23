@@ -278,19 +278,16 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 	else if (client.getAuth() == 1)
 	{
 		if (cmd.compare("USER") != std::string::npos)
-		{
-			// USER(args, fd);
-			if (!client.getNickname().empty() && !client.getUsername().empty())
-				client.setAuth(0);
-		}
+			USER(args, fd);
 		else if (cmd.compare("NICK") != std::string::npos)
-		{
-			// NICK(args, fd);
-			if (!client.getNickname().empty() && !client.getUsername().empty())
-				client.setAuth(0);
-		}
+			NICK(args, fd);
 		else
 			sendResponse(ERR_NOTREGISTERED(_clients[fd].getNickname()), fd);
+		if (!client.getNickname().empty() && !client.getUsername().empty())
+		{
+			client.setAuth(0);
+			finishRegistration(fd);
+		}
 		return;
 	}
 
@@ -300,6 +297,9 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 	CMD_PAIR(TOPIC);
 	CMD_PAIR(KICK);
 	CMD_PAIR(INVITE);
+	CMD_PAIR(USER);
+	CMD_PAIR(NICK);
+	CMD_PAIR(PRIVMSG);
 	for (auto it = commands.begin(); it != commands.end(); it++)
 	{
 		if (!it->first.compare(cmd))
