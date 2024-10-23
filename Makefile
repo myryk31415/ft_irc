@@ -6,7 +6,7 @@
 #    By: padam <padam@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/09 15:34:56 by padam             #+#    #+#              #
-#    Updated: 2024/10/23 18:25:11 by padam            ###   ########.fr        #
+#    Updated: 2024/10/23 20:47:04 by padam            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,14 +20,17 @@ LIBS =
 SRC_PATH = src
 OBJ_PATH = obj
 
-OBJ_DIRS = Commands
+OBJ_DIRS = commands server
 
-SRCS_MAIN =	main.cpp Server.cpp Client.cpp Channel.cpp
+SRCS_MAIN =	main.cpp Client.cpp Channel.cpp
+
+SRCS_SERV = Server.cpp ServerPoll.cpp
 
 SRCS_CMD = KICK.cpp MODE.cpp INVITE.cpp JOIN.cpp PART.cpp TOPIC.cpp NICK.cpp PRIVMSG.cpp PASS.cpp USER.cpp
 
 SRC_NAME =										$(SRCS_MAIN)	\
-			$(addprefix  Commands/,				$(SRCS_CMD))	\
+			$(addprefix  commands/,				$(SRCS_CMD))	\
+			$(addprefix  server/,				$(SRCS_SERV))	\
 
 RED = \033[1;31m
 GREEN = \033[1;32m

@@ -20,6 +20,8 @@
 #include "Channel.hpp"
 #include "respond.hpp"
 
+#define CMD_PAIR(cmd) commands.push_back(std::make_pair(#cmd, &Server::cmd));
+
 class Server
 {
 	private:
@@ -36,17 +38,26 @@ class Server
 		Server(int port, std::string pass);
 		~Server();
 
+		// administrative
 		static void	signalHandler(int signal);
-
 		void		init();
 		void		setupServerSocket();
 		void		shutdown();
 		void		clearClient(int fd);
-		void		poll();
 		void		acceptClient();
+		void		finishRegistration(int fd);
+
+		// getter
 		Client*		getClient(int fd);
 		Client*		getClient(std::string nick);
-		void		receiveData(int fd);
+
+		// polling
+		void						poll();
+		void						receiveData(int fd);
+		void						parseCommand(const std::string command, int fd);
+		std::vector<std::string>	parseArgs(const std::string command_args, int fd);
+		void						cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd);
+
 		// void		sendError(std::string numeric, std::string client, std::string msg, int fd);
 		// void		sendError(std::string numeric, std::string client, std::string channel, std::string msg, int fd);
 		template <typename... Args>
@@ -55,20 +66,18 @@ class Server
 		void		userLimit(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd);
 		void		channelKey(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd);
 		void		operatorPriv(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd);
-		void		leaveAllChannels(Client &sender);
-		void		parseCommand(const std::string command, int fd);
-		std::vector<std::string>	parseArgs(const std::string command_args, int fd);
-		void		cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd);
-		bool		checkDuplicate(std::string nick);
-		void		finishRegistration(int fd);
-		//Commands
+
+
+		// Commands
 		void	KICK(std::vector<std::string> cmd, int fd);
 		void	MODE(std::vector<std::string> cmd, int fd);
 		void	INVITE(std::vector<std::string> cmd, int fd);
 		void	TOPIC(std::vector<std::string> cmd, int fd);
 		void	PART(std::vector<std::string> cmd, int fd);
 		void	JOIN(std::vector<std::string> cmd, int fd);
+		void	leaveAllChannels(Client &sender);
 		void	NICK(std::vector<std::string> cmd, int fd);
+		bool	checkDuplicate(std::string nick);
 		void	USER(std::vector<std::string> cmd, int fd);
 		void	PASS(std::vector<std::string> cmd, int fd);
 		void	PRIVMSG(std::vector<std::string> cmd, int fd);

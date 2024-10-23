@@ -20,6 +20,7 @@ class Client
 		Client();
 		~Client();
 
+		// getter and setter
 		int		getFd() const;
 		void	setFd(int fd);
 		void	setIpAddr(const std::string ip_addr);
@@ -31,6 +32,8 @@ class Client
 		void	setRealname(const std::string &new_realname);
 		int		getAuth() const;
 		void	setAuth(int auth_stage);
+
+		//actual functions
 		void	joinChannel(Channel *channel);
 		void	leaveChannel(Channel *channel);
 		void	receiveMsg(const std::string& msg);
