@@ -81,6 +81,7 @@ class Server
 		void	USER(std::vector<std::string> cmd, int fd);
 		void	PASS(std::vector<std::string> cmd, int fd);
 		void	PRIVMSG(std::vector<std::string> cmd, int fd);
+		void	CAP(std::vector<std::string> cmd, int fd);
 };
 
 void splitComma(std::string &cmd, std::vector<std::string> &split);
