@@ -272,7 +272,7 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 		if (cmd.compare("PASS") == std::string::npos)
 			sendResponse(ERR_NOTREGISTERED(_clients[fd].getNick()), fd);
 		else
-		// 	PASS(args, fd);
+			PASS(args, fd);
 		return;
 	}
 	else if (client.getAuth() == 1)

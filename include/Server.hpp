@@ -67,4 +67,5 @@ class Server
 		void	TOPIC(std::vector<std::string> cmd, int fd);
 		void	PART(std::vector<std::string> cmd, int fd);
 		void	JOIN(std::vector<std::string> cmd, int fd);
+		void	PASS(std::vector<std::string> cmd, int fd);
 };

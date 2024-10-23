@@ -16,6 +16,8 @@
 # define ERR_INVITEONLYCHAN(nick, channel) (": 473 " + nick + " " + channel + " :Cannot join channel (+i)" + CRLF)
 # define ERR_CHANNELISFULL(nick, channel) (": 471 " + nick + " " + channel + " :Cannot join channel (+l)" + CRLF)
 # define ERR_NOTREGISTERED(client) (": 451 " + client + " :You have not registered" + CRLF)
+# define ERR_ALREADYREGISTERED(client) (": 462 " + client + " :You may not reregister" + CRLF)
+# define ERR_PASSWDMISMATCH(client) (": 464 " + client + " :Password incorrect" + CRLF)
 //Repliies
 # define RPL_CHANNELMODEIS(nick, channel, modes, mode_values) (": 324 " + nick + " #" + channel + " " + modes + " " + mode_values + CRLF)
 # define RPL_CHANGEDMODE(host, channel, modes, args) (":" + host + " MODE #" + channel + " " + modes + " " + args+ CRLF)
