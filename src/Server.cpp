@@ -160,9 +160,9 @@ void	Server::receiveData(int fd)
 	} else {
 		std::cout << MAGENTA << "Client " << fd << " data: " << RESET << buff << std::endl;
 		splitData(buff, cmd);
-		if (cmd[0].compare("CAP LS 302"))
+		if (!cmd[0].compare("CAP LS 302"))
 			sendResponse("CAP * LS :\r\n", fd);
-		if (cmd[0].compare("CAP REQ :"))
+		if (!cmd[0].compare("CAP REQ :"))
 			sendResponse("CAP * ACK :\r\n", fd);
 		for (auto it = cmd.begin(); it != cmd.end(); it++)
 			parseCommand(*it, fd);
@@ -304,6 +304,6 @@ void	Server::finishRegistration(int fd)
 	sendResponse(RPL_WELCOME(client.getNick(), _name, client.getNick()), fd);
 	sendResponse(RPL_YOURHOST(client.getNick(), _name, version), fd);
 	sendResponse(RPL_CREATED(client.getNick(), "today"), fd);
-	sendResponse(RPL_MYINFO(client.getNick(), _name, version, "banana", "potato"), fd);
+	sendResponse(RPL_MYINFO(client.getNick(), _name, version, "itkol", "kl"), fd);
 	sendResponse(RPL_WELCOME(client.getNick(), _name, client.getNick()), fd);
 }

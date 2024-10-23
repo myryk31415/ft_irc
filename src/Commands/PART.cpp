@@ -37,7 +37,7 @@ void Server::PART(std::vector<std::string> cmd, int fd)
 			{sendResponse(ERR_NOTONCHANNEL(sender.getNick(), (*it).substr(1)), fd); continue ;}
 		std::stringstream ss;
 		ss << ":" << sender.getNick() << "!" << sender.getUsername() << "@" << "localhost" << " PART #" << curChannel.getName() << " :" << reason;
-		curChannel.broadcastMessage(ss.str(), sender);
+		curChannel.systemMessage(ss.str());
 		curChannel.removeUser(sender);
 		if (curChannel.getOperator(sender.getNick()))
 			curChannel.removeOperator(sender);

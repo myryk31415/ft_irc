@@ -126,7 +126,7 @@ void Server::MODE(std::vector<std::string> cmd, int fd)
 	Channel &channel = _channels[target.substr(1)];
 	if (!channel.getUser(sender.getNick())) // check if sender is in channel
 		{sendResponse(ERR_NOTONCHANNEL(sender.getNick(), target.substr(1)), fd); return ;}
-	if (!modestring.empty())
+	if (modestring.empty())
 		{sendResponse(RPL_CHANNELMODEIS(sender.getNick(), target.substr(1), channel.getModestring(), channel.getModesvalues()), fd); return ;}
 	if (!channel.getOperator(sender.getNick())) // check if sender has perms
 		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNick(), target.substr(1)), fd); return ;}

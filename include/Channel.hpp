@@ -30,7 +30,7 @@ class Channel
 
 	public:
 		Channel() {};
-		Channel(const std::string &channelName);
+		Channel(std::string &channelName);
 		Channel(const std::string &channelName, const std::string &key);
 		~Channel();
 		void addUser(Client &client);
@@ -50,7 +50,7 @@ class Channel
 		std::string getModesvalues() const;
 		std::string	getModeValue(int mode) const;
 		bool isChannelfull() const;
-
+		void	clearModes();
 		//Invite Handling
 		void inviteUser(Client &invitedClient, Client &inviter);
 		bool isUserInvited(Client &client) const;
