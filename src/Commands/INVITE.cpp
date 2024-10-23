@@ -12,7 +12,7 @@ void Server::INVITE(std::vector<std::string> cmd, int fd)
 	Channel		&channel = _channels[channelnick];
 	if (!channel.getUser(sender.getNick())) // check if sender is in channel
 		{sendResponse(ERR_NOTONCHANNEL(sender.getNick(), channelnick.substr(1)), fd); return ;}
-	if (_clients.find(target) == _clients.end())
+	if (!getClient(target))
 		{sendResponse(ERR_NOSUCHNICK(sender.getNick(), target), fd); return ;}
 	if (channel.isModeSet(INVITE_ONLY) && !channel.getOperator(sender.getNick())) // check if sender has perms
 		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNick(), channelnick.substr(1)), fd); return ;}
