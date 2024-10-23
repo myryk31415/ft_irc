@@ -259,14 +259,17 @@ std::vector<std::string>	Server::parseArgs(const std::string command_args, int f
 		args.emplace_back(command_args.substr(colon + 1));
 	return args;
 }
-
 #define CMD_PAIR(cmd) commands.push_back(std::make_pair(#cmd, &Server::cmd));
 
 void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd)
 {
 	std::vector<std::pair<std::string, void (Server::*)(std::vector<std::string>, int)>>	commands;
 	CMD_PAIR(MODE);
-
+	CMD_PAIR(JOIN);
+	CMD_PAIR(PART);
+	CMD_PAIR(TOPIC);
+	CMD_PAIR(KICK);
+	CMD_PAIR(INVITE);
 	for (auto it = commands.begin(); it != commands.end(); it++)
 		if (!it->first.compare(cmd))
 			(this->*(it->second))(args, fd);
