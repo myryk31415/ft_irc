@@ -33,10 +33,12 @@ void Server::JOIN(std::vector<std::string> cmd, int fd)
 	Client &sender = *getClient(fd);
 	if (!cmd.empty() && cmd[0] == "0")
 		{leaveAllChannels(sender); return ;}
-	if (cmd.size() < 2)
+	if (cmd.size() < 1)
 		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), (cmd.empty() ? "" : "JOIN " + cmd[0])), fd); return ;}
 	splitComma(cmd[0], channels);
-	splitComma(cmd[1], keys);
+	if (cmd.size() == 2)
+		splitComma(cmd[1], keys);
+	
 
 	auto itKeys = keys.begin();
 	for (auto itChannels = channels.begin(); itChannels != channels.end(); itChannels++)
@@ -44,13 +46,21 @@ void Server::JOIN(std::vector<std::string> cmd, int fd)
 		if ((*itChannels)[0] != '#')
 			{sendResponse(ERR_NOSUCHCHANNEL(sender.getNick(), (*itChannels).substr(1)), fd); continue;}
 		// if (_channels.find((*itChannels).substr(1)) == _channels.end())
-		Channel &curChannel = _channels[(*itChannels).substr(1)];
+		std::string channelname = (*itChannels).substr(1);
+		if (_channels.find(channelname) == _channels.end())
+		{
+			if (itKeys != keys.end())
+				_channels.emplace(channelname, Channel(channelname, *itKeys));
+			else
+				_channels.emplace(channelname, Channel(channelname));
+		}
+		Channel &curChannel = _channels[channelname];
 		if (curChannel.isModeSet(KEY) && itKeys != keys.end() && curChannel.getModeValue(KEY) != *itKeys)
-			{sendResponse(ERR_BADCHANNELKEY(sender.getNick(), (*itChannels).substr(1)), fd); continue;}
+			{sendResponse(ERR_BADCHANNELKEY(sender.getNick(), channelname), fd); continue;}
 		if (curChannel.isModeSet(INVITE_ONLY) && !curChannel.isUserInvited(sender))
-			{sendResponse(ERR_INVITEONLYCHAN(sender.getNick(), (*itChannels).substr(1)), fd); continue;}
+			{sendResponse(ERR_INVITEONLYCHAN(sender.getNick(), channelname), fd); continue;}
 		if (curChannel.isModeSet(USER_LIMIT) && curChannel.isChannelfull())
-			{sendResponse(ERR_CHANNELISFULL(sender.getNick(), (*itChannels).substr(1)), fd); continue;}
+			{sendResponse(ERR_CHANNELISFULL(sender.getNick(), channelname), fd); continue;}
 		curChannel.addUser(sender);
 		if (curChannel.getUserCount() == 1)
 			curChannel.addOperator(sender);

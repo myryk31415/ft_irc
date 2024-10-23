@@ -31,13 +31,13 @@ void Server::KICK(std::vector<std::string> cmd, int fd)
 	{
 		Channel &curChannel = _channels[channel];
 		if (!curChannel.getUser(sender.getNick())) // check if sender is in channel
-			{sendResponse(ERR_NOTONCHANNEL(sender.getNick(), channel), fd); return ;}
+			{sendResponse(ERR_NOTONCHANNEL(sender.getNick(), channel.substr(1)), fd); return ;}
 		if (!curChannel.getOperator(sender.getNick())) // check if sender has perms
-		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNick(), channel), fd); return ;}
+		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNick(), channel.substr(1)), fd); return ;}
 		for (auto it = usersToKick.begin(); it != usersToKick.end(); it++) // Iterate through all users to kick
 		{
 				if (!curChannel.getUser(*it)) // check if user to kick is in channel
-					{sendResponse(ERR_USERNOTINCHANNEL(sender.getNick(), *it, channel), fd); continue;}
+					{sendResponse(ERR_USERNOTINCHANNEL(sender.getNick(), *it, channel.substr(1)), fd); continue;}
 				std::stringstream ss;
 				ss << ":" << sender.getNick() << "!" << curChannel.getUser(*it)->getUsername() << "@" << "localhost" << " KICK #" << curChannel.getName() << " " << curChannel.getUser(*it)->getNick() << " :" << reason;
 				curChannel.broadcastMessage(ss.str(), sender);
@@ -49,5 +49,5 @@ void Server::KICK(std::vector<std::string> cmd, int fd)
 		}
 	}
 	else
-		sendResponse(ERR_NOSUCHCHANNEL(sender.getNick(), channel), fd);
+		sendResponse(ERR_NOSUCHCHANNEL(sender.getNick(), channel.substr(1)), fd);
 }

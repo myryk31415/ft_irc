@@ -1,12 +1,19 @@
 
 #include "Channel.hpp"
 
-Channel::Channel(const std::string &channelName) : _name(channelName), _modes(5)
+void	Channel::clearModes()
 {
+	for (int i = 0; i < 5; i++)
+		setMode(i, "", false);
+}
+Channel::Channel(std::string &channelName) : _name(channelName), _modes(5)
+{
+	// clearModes();
 }
 
 Channel::Channel(const std::string &channelName, const std::string &key) : _name(channelName), _modes(5)
 {
+	// clearModes();
 	setMode(KEY, key, true);
 }
 
@@ -17,7 +24,7 @@ Channel::~Channel()
 void Channel::addUser(Client &client)
 {
 	if (_users.find(client.getNick()) != _users.end())
-		throw std::runtime_error("User is already in channel");
+		std::cerr << "User is already in channel";
 	_users[client.getNick()] = client;
 	systemMessage(client.getNick() + " has joined the channel");
 }
