@@ -44,6 +44,16 @@ void	Client::setUsername(const std::string &new_username)
 	_username = new_username;
 }
 
+int		Client::getAuth() const
+{
+	return _auth_stage;
+}
+
+void	Client::setAuth(int auth_stage)
+{
+	_auth_stage = auth_stage;
+}
+
 void	Client::joinChannel(Channel *channel)
 {
 	channel->addUser(*this);

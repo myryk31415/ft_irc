@@ -36,7 +36,7 @@ int	main(int argc, char **argv)
 	std::cout << port << std::endl;
 	pass = std::string(argv[2]);
 
-	Server server(port);
+	Server server(port, pass);
 	try
 	{
 		server.init();

@@ -28,8 +28,10 @@ class Server
 		std::unordered_map<int, Client> _clients;
 		std::unordered_map<std::string, Channel> _channels;
 		std::string			_name;
+		std::string			_pass;
 	public:
 		Server(int port);
+		Server(int port, std::string pass);
 		~Server();
 
 		static void	signalHandler(int signal);

@@ -5,6 +5,8 @@ bool Server::_signal = false;
 
 Server::Server(int port) : _port(port) {}
 
+Server::Server(int port, std::string pass) : _port(port), _pass(pass) {}
+
 Server::~Server() {}
 
 void	Server::signalHandler(int signal)
@@ -122,8 +124,7 @@ void	Server::acceptClient()
 	client_poll.revents = 0;
 
 	client.setFd(client_fd);
-	client.setNick(inet_ntoa(addr.sin_addr));
-	client.setIpAddr(client.getNick());
+	client.setIpAddr(inet_ntoa(addr.sin_addr));
 	_clients[client_fd] = client;
 	_sockets.push_back(client_poll);
 
@@ -264,6 +265,20 @@ std::vector<std::string>	Server::parseArgs(const std::string command_args, int f
 void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd)
 {
 	std::vector<std::pair<std::string, void (Server::*)(std::vector<std::string>, int)>>	commands;
+	Client	client = _clients[fd];
+
+	if (client.getAuth() == 2)
+	{
+		if (cmd.compare("PASS") == std::string::npos)
+		{
+			std::string nick = _clients[fd].getNick();
+			sendResponse(ERR_NOTREGISTERED(nick), fd);
+			return;
+		}
+		// else
+		// 	PASS(args, fd);
+	}
+
 	CMD_PAIR(MODE);
 	CMD_PAIR(JOIN);
 	CMD_PAIR(PART);
@@ -271,8 +286,13 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 	CMD_PAIR(KICK);
 	CMD_PAIR(INVITE);
 	for (auto it = commands.begin(); it != commands.end(); it++)
+	{
 		if (!it->first.compare(cmd))
+		{
 			(this->*(it->second))(args, fd);
+			break;
+		}
+	}
 }
 
 void	Server::finishRegistration(int fd)

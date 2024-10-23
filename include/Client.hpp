@@ -14,7 +14,7 @@ class Client
 		std::string	_ip_addr;
 		std::string _nick;
 		std::string _username;
-		bool		auth;
+		int			_auth_stage; // 2 no pass; 1 no nick; 0 authenticated
 	public:
 		Client();
 		~Client();
@@ -26,6 +26,8 @@ class Client
 		void	setNick(const std::string &new_nick);
 		const std::string& getUsername(void) const;
 		void	setUsername(const std::string &new_username);
+		int		getAuth() const;
+		void	setAuth(int auth_stage);
 		void	joinChannel(Channel *channel);
 		void	leaveChannel(Channel *channel);
 		void	receiveMsg(const std::string& msg);
