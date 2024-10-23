@@ -213,7 +213,7 @@ Client*		Server::getClient(int fd)
 	return NULL;
 }
 
-void	Server::parseCommand(const std::string command)
+void	Server::parseCommand(const std::string command, int fd)
 {
 	std::string	cmd;
 	std::vector<std::string> args;
@@ -232,6 +232,7 @@ void	Server::parseCommand(const std::string command)
 	for (auto it = args.begin(); it != args.end(); it++)
 		std::cout << '"' << *it << '"' << std::endl;
 	std::cout << std::endl;
+	cmdDecide(cmd, args, fd);
 }
 
 std::vector<std::string>	Server::parseArgs(const std::string command_args)
@@ -256,4 +257,24 @@ std::vector<std::string>	Server::parseArgs(const std::string command_args)
 	if (colon != std::string::npos)
 		args.emplace_back(command_args.substr(colon + 1));
 	return args;
+}
+#define CMD_PAIR(cmd) commands.push_back(std::make_pair(#cmd, cmd));
+#define CMD_LIST(a, b, c, d, e, f, g, h) \
+	CMD_PAIR(a) \
+	CMD_PAIR(b) \
+	CMD_PAIR(c) \
+	CMD_PAIR(d) \
+	CMD_PAIR(e) \
+	CMD_PAIR(f) \
+	CMD_PAIR(g) \
+	CMD_PAIR(h)
+
+void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd)
+{
+	std::vector<std::pair<std::string, void (Server::*)(std::vector<std::string>, int)>>	commands;
+	CMD_LIST(MODE, b, c, d, e, f, g, h);
+
+	for (auto it = commands.begin(); it != commands.end(); it++)
+		if (!it->first.compare(cmd))
+			(this->*(it->second))(args, fd);
 }
