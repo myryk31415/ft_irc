@@ -284,6 +284,6 @@ void	Server::finishRegistration(int fd)
 	sendResponse(RPL_WELCOME(client.getNick(), _name, client.getNick()), fd);
 	sendResponse(RPL_YOURHOST(client.getNick(), _name, version), fd);
 	sendResponse(RPL_CREATED(client.getNick(), "today"), fd);
-	sendResponse(RPL_MYINFO(client.getNick(), _name, version, "banana", "potato"), fd);
+	sendResponse(RPL_MYINFO(client.getNick(), _name, version, "itkol", "kl"), fd);
 	sendResponse(RPL_WELCOME(client.getNick(), _name, client.getNick()), fd);
 }
