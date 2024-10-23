@@ -166,7 +166,7 @@ void	Server::receiveData(int fd)
 		if (cmd[0].compare("CAP END"))
 			sendResponse(": 001 MONI DIGGA", fd);
 		for (auto it = cmd.begin(); it != cmd.end(); it++)
-			parseCommand(*it);
+			parseCommand(*it, fd);
 	}
 }
 
@@ -224,7 +224,7 @@ void	Server::parseCommand(const std::string command, int fd)
 		cmd_end = command.size();
 	cmd_end = std::min(colon, cmd_end);
 	cmd = command.substr(0, cmd_end);
-	args = parseArgs(command.substr(cmd_end));
+	args = parseArgs(command.substr(cmd_end), fd);
 
 	std::cout << std::endl << "PARSED COMMAND:" << std::endl;
 	std::cout << '"' << cmd << '"' << std::endl;
@@ -232,10 +232,10 @@ void	Server::parseCommand(const std::string command, int fd)
 	for (auto it = args.begin(); it != args.end(); it++)
 		std::cout << '"' << *it << '"' << std::endl;
 	std::cout << std::endl;
-	cmdDecide(cmd, args, fd);
+	// cmdDecide(cmd, args, fd);
 }
 
-std::vector<std::string>	Server::parseArgs(const std::string command_args)
+std::vector<std::string>	Server::parseArgs(const std::string command_args, int fd)
 {
 	std::vector<std::string>	args;
 	size_t	colon;
@@ -258,23 +258,23 @@ std::vector<std::string>	Server::parseArgs(const std::string command_args)
 		args.emplace_back(command_args.substr(colon + 1));
 	return args;
 }
-#define CMD_PAIR(cmd) commands.push_back(std::make_pair(#cmd, cmd));
-#define CMD_LIST(a, b, c, d, e, f, g, h) \
-	CMD_PAIR(a) \
-	CMD_PAIR(b) \
-	CMD_PAIR(c) \
-	CMD_PAIR(d) \
-	CMD_PAIR(e) \
-	CMD_PAIR(f) \
-	CMD_PAIR(g) \
-	CMD_PAIR(h)
+// #define CMD_PAIR(cmd) commands.push_back(std::make_pair(#cmd, cmd));
+// #define CMD_LIST(a, b, c, d, e, f, g, h) \
+// 	CMD_PAIR(a) \
+// 	CMD_PAIR(b) \
+// 	CMD_PAIR(c) \
+// 	CMD_PAIR(d) \
+// 	CMD_PAIR(e) \
+// 	CMD_PAIR(f) \
+// 	CMD_PAIR(g) \
+// 	CMD_PAIR(h)
 
-void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd)
-{
-	std::vector<std::pair<std::string, void (Server::*)(std::vector<std::string>, int)>>	commands;
-	CMD_LIST(MODE, b, c, d, e, f, g, h);
+// void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd)
+// {
+// 	std::vector<std::pair<std::string, void (Server::*)(std::vector<std::string>, int)>>	commands;
+// 	CMD_LIST(MODE, b, c, d, e, f, g, h);
 
-	for (auto it = commands.begin(); it != commands.end(); it++)
-		if (!it->first.compare(cmd))
-			(this->*(it->second))(args, fd);
-}
+// 	for (auto it = commands.begin(); it != commands.end(); it++)
+// 		if (!it->first.compare(cmd))
+// 			(this->*(it->second))(args, fd);
+// }
