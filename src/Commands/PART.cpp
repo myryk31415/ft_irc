@@ -25,7 +25,7 @@ void Server::PART(std::vector<std::string> cmd, int fd)
 	std::vector<std::string> channelsToPart;
 	Client &sender = *getClient(fd);
 	if (cmd.size() < 1)
-		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), (cmd.empty() ? "" : "PART " + cmd[0])), fd); return ;}
+		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), (cmd.empty() ? "PART" : "PART " + cmd[0])), fd); return ;}
 	std::string reason = splitCmdPart(cmd, channelsToPart);
 
 	for (auto it = channelsToPart.begin(); it != channelsToPart.end(); it++)

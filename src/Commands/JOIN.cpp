@@ -34,7 +34,7 @@ void Server::JOIN(std::vector<std::string> cmd, int fd)
 	if (!cmd.empty() && cmd[0] == "0")
 		{leaveAllChannels(sender); return ;}
 	if (cmd.size() < 1)
-		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), (cmd.empty() ? "" : "JOIN " + cmd[0])), fd); return ;}
+		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), (cmd.empty() ? "JOIN" : "JOIN " + cmd[0])), fd); return ;}
 	splitComma(cmd[0], channels);
 	if (cmd.size() == 2)
 		splitComma(cmd[1], keys);

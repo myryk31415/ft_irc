@@ -22,6 +22,8 @@
 
 # define ERR_ALREADYREGISTERED(client) (": 462 " + client + " :You may not reregister" + CRLF)
 # define ERR_PASSWDMISMATCH(client) (": 464 " + client + " :Password incorrect" + CRLF)
+# define ERR_NORECIPIENT(nick) (": 411 " + nick + " :No recipient given" + CRLF)
+# define ERR_NOTEXTTOSEND(nick) (": 412 " + nick + " :No text to send" + CRLF)
 //Repliies
 # define RPL_CHANNELMODEIS(nick, channel, modes, mode_values) (": 324 " + nick + " #" + channel + " " + modes + " " + mode_values + CRLF)
 # define RPL_CHANGEDMODE(host, channel, modes, args) (":" + host + " MODE #" + channel + " " + modes + " " + args+ CRLF)

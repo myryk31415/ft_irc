@@ -5,7 +5,7 @@ void Server::TOPIC(std::vector<std::string> cmd, int fd)
 	std::string topic;
 	Client &sender = *getClient(fd);
 	if (cmd.empty())
-	{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), ""), fd); return;}
+	{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), "TOPIC"), fd); return;}
 	std::string targetChannel = cmd[0];
 	if (targetChannel.empty() || targetChannel[0] != '#' || _channels.find(targetChannel.substr(1)) == _channels.end())
 		{sendResponse(ERR_NOSUCHCHANNEL(sender.getNickname(), targetChannel.substr(1)), fd); return;}

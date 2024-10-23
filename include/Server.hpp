@@ -71,4 +71,6 @@ class Server
 		void	PASS(std::vector<std::string> cmd, int fd);
 		void	NICK(std::vector<std::string> cmd, int fd);
 		void	USER(std::vector<std::string> cmd, int fd);
+		void	PASS(std::vector<std::string> cmd, int fd);
+		void	PRIVMSG(std::vector<std::string> cmd, int fd);
 };

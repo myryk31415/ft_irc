@@ -24,7 +24,7 @@ void Server::KICK(std::vector<std::string> cmd, int fd)
 	std::vector<std::string> usersToKick;
 	Client &sender = *getClient(fd);
 	if (cmd.size() < 2)
-		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), (cmd.empty() ? "" : "KICK " + cmd[0])), fd); return ;}
+		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), (cmd.empty() ? "KICK" : "KICK " + cmd[0])), fd); return ;}
 	std::string channel = cmd[0];
 	std::string reason = splitCmdKick(cmd, channel, usersToKick);
 	if (_channels.find(channel) != _channels.end())
