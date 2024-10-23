@@ -270,13 +270,28 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 	if (client.getAuth() == 2)
 	{
 		if (cmd.compare("PASS") == std::string::npos)
-		{
-			std::string nick = _clients[fd].getNick();
-			sendResponse(ERR_NOTREGISTERED(nick), fd);
-			return;
-		}
-		// else
+			sendResponse(ERR_NOTREGISTERED(_clients[fd].getNick()), fd);
+		else
 		// 	PASS(args, fd);
+		return;
+	}
+	else if (client.getAuth() == 1)
+	{
+		if (cmd.compare("USER") != std::string::npos)
+		{
+			// USER(args, fd);
+			if (!client.getNick().empty() && !client.getUsername().empty())
+				client.setAuth(0);
+		}
+		else if (cmd.compare("NICK") != std::string::npos)
+		{
+			// NICK(args, fd);
+			if (!client.getNick().empty() && !client.getUsername().empty())
+				client.setAuth(0);
+		}
+		else
+			sendResponse(ERR_NOTREGISTERED(_clients[fd].getNick()), fd);
+		return;
 	}
 
 	CMD_PAIR(MODE);
