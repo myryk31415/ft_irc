@@ -50,9 +50,9 @@ void Server::channelKey(bool sign, Channel &channel, std::string &modeReport, st
 	{
 		std::string key = *argsIt;
 		if (key.empty())
-			{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNick(), "(o)"), fd); return ;}
+			{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNickname(), "(o)"), fd); return ;}
 		if (key.find_first_of(" \t\v") != std::string::npos)
-			{sendResponse(ERR_INVALIDMODEPARAM(getClient(fd)->getNick(), channel.getName(), "k", key, "Should be without Whitespaces"), fd); return ;}
+			{sendResponse(ERR_INVALIDMODEPARAM(getClient(fd)->getNickname(), channel.getName(), "k", key, "Should be without Whitespaces"), fd); return ;}
 		channel.setMode(KEY, key, true);
 		argsReport += *argsIt;
 		argsIt++;
@@ -71,12 +71,12 @@ void Server::operatorPriv(bool sign, Channel &channel, std::string &modeReport, 
 {
 	std::string test = *argsIt;
 	if (test.empty())
-		{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNick(), "(o)"), fd); return ;}
+		{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNickname(), "(o)"), fd); return ;}
 	if (!getClient(test))
-		{sendResponse(ERR_NOSUCHNICK(getClient(fd)->getNick() ,*argsIt), fd); return ;}
+		{sendResponse(ERR_NOSUCHNICK(getClient(fd)->getNickname() ,*argsIt), fd); return ;}
 	Client &user = *(getClient(test));
 	if (!channel.getUser(*argsIt))
-		{sendResponse(ERR_USERNOTINCHANNEL(getClient(fd)->getNick(), *argsIt, channel.getName()), fd); return ;}
+		{sendResponse(ERR_USERNOTINCHANNEL(getClient(fd)->getNickname(), *argsIt, channel.getName()), fd); return ;}
 	if (sign)
 		channel.addOperator(user);
 	else
@@ -92,9 +92,9 @@ void Server::userLimit(bool sign, Channel &channel, std::string &modeReport, std
 	{
 		std::string limit = *argsIt;
 		if (limit.empty())
-			{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNick(), "(o)"), fd); return ;}
+			{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNickname(), "(o)"), fd); return ;}
 		if (limit.find_first_not_of("0123456789") != std::string::npos || std::atoi(limit.c_str()) <= 0)
-			{sendResponse(ERR_INVALIDMODEPARAM(getClient(fd)->getNick(), channel.getName(), "i", limit, "Should be a Int Number"), fd); return ;}
+			{sendResponse(ERR_INVALIDMODEPARAM(getClient(fd)->getNickname(), channel.getName(), "i", limit, "Should be a Int Number"), fd); return ;}
 		channel.setMode(USER_LIMIT, limit, true);
 		argsReport += *argsIt;
 		argsIt++;
@@ -116,20 +116,20 @@ void Server::MODE(std::vector<std::string> cmd, int fd)
 	std::string modeReport;
 	std::string argsReport;
 	if (cmd.empty())
-		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), ""), fd); return;}
+		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), ""), fd); return;}
 	auto cmdIt = cmd.begin();
 	target = *cmdIt++;
 	if (target.empty() || target[0] != '#' || _channels.find(target.substr(1)) == _channels.end())
-		{sendResponse(ERR_NOSUCHCHANNEL(sender.getNick(), target.substr(1)), fd); return;}
+		{sendResponse(ERR_NOSUCHCHANNEL(sender.getNickname(), target.substr(1)), fd); return;}
 	if (cmdIt != cmd.end())
 		modestring = *cmdIt++;
 	Channel &channel = _channels[target.substr(1)];
-	if (!channel.getUser(sender.getNick())) // check if sender is in channel
-		{sendResponse(ERR_NOTONCHANNEL(sender.getNick(), target.substr(1)), fd); return ;}
+	if (!channel.getUser(sender.getNickname())) // check if sender is in channel
+		{sendResponse(ERR_NOTONCHANNEL(sender.getNickname(), target.substr(1)), fd); return ;}
 	if (modestring.empty())
-		{sendResponse(RPL_CHANNELMODEIS(sender.getNick(), target.substr(1), channel.getModestring(), channel.getModesvalues()), fd); return ;}
-	if (!channel.getOperator(sender.getNick())) // check if sender has perms
-		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNick(), target.substr(1)), fd); return ;}
+		{sendResponse(RPL_CHANNELMODEIS(sender.getNickname(), target.substr(1), channel.getModestring(), channel.getModesvalues()), fd); return ;}
+	if (!channel.getOperator(sender.getNickname())) // check if sender has perms
+		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNickname(), target.substr(1)), fd); return ;}
 	for (auto pos = modestring.begin(); pos != modestring.end(); pos++)
 	{
 		if (*pos == '+' || *pos == '-')
@@ -145,7 +145,7 @@ void Server::MODE(std::vector<std::string> cmd, int fd)
 		else if (*pos == 'l')
 			userLimit(sign, channel, modeReport, cmdIt, argsReport, fd);
 		else
-			sendResponse(ERR_UMODEUNKOWNFLAG(sender.getNick()), fd);
+			sendResponse(ERR_UMODEUNKOWNFLAG(sender.getNickname()), fd);
 	}
 	channel.systemMessage(RPL_CHANGEDMODE(sender.getUsername(), channel.getName(), modeReport, argsReport));
 }

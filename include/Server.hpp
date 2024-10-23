@@ -70,4 +70,5 @@ class Server
 		void	JOIN(std::vector<std::string> cmd, int fd);
 		void	PASS(std::vector<std::string> cmd, int fd);
 		void	NICK(std::vector<std::string> cmd, int fd);
+		void	USER(std::vector<std::string> cmd, int fd);
 };

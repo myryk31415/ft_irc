@@ -210,7 +210,7 @@ Client*	Server::getClient(int fd)
 Client*	Server::getClient(std::string nick)
 {
 	for (auto iter = _clients.begin(); iter != _clients.end(); iter++)
-		if ((*iter).second.getNick() == nick)
+		if ((*iter).second.getNickname() == nick)
 			return & (*iter).second;
 	return NULL;
 }
@@ -265,12 +265,12 @@ std::vector<std::string>	Server::parseArgs(const std::string command_args, int f
 void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd)
 {
 	std::vector<std::pair<std::string, void (Server::*)(std::vector<std::string>, int)>>	commands;
-	Client	client = _clients[fd];
+	Client	&client = _clients[fd];
 
 	if (client.getAuth() == 2)
 	{
 		if (cmd.compare("PASS") == std::string::npos)
-			sendResponse(ERR_NOTREGISTERED(_clients[fd].getNick()), fd);
+			sendResponse(ERR_NOTREGISTERED(_clients[fd].getNickname()), fd);
 		else
 			PASS(args, fd);
 		return;
@@ -280,17 +280,17 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 		if (cmd.compare("USER") != std::string::npos)
 		{
 			// USER(args, fd);
-			if (!client.getNick().empty() && !client.getUsername().empty())
+			if (!client.getNickname().empty() && !client.getUsername().empty())
 				client.setAuth(0);
 		}
 		else if (cmd.compare("NICK") != std::string::npos)
 		{
 			// NICK(args, fd);
-			if (!client.getNick().empty() && !client.getUsername().empty())
+			if (!client.getNickname().empty() && !client.getUsername().empty())
 				client.setAuth(0);
 		}
 		else
-			sendResponse(ERR_NOTREGISTERED(_clients[fd].getNick()), fd);
+			sendResponse(ERR_NOTREGISTERED(_clients[fd].getNickname()), fd);
 		return;
 	}
 
@@ -316,9 +316,9 @@ void	Server::finishRegistration(int fd)
 	Client		client = _clients[fd];
 	std::string version = "0.69";
 
-	sendResponse(RPL_WELCOME(client.getNick(), _name, client.getNick()), fd);
-	sendResponse(RPL_YOURHOST(client.getNick(), _name, version), fd);
-	sendResponse(RPL_CREATED(client.getNick(), "today"), fd);
-	sendResponse(RPL_MYINFO(client.getNick(), _name, version, "itkol", "kl"), fd);
-	sendResponse(RPL_WELCOME(client.getNick(), _name, client.getNick()), fd);
+	sendResponse(RPL_WELCOME(client.getNickname(), _name, client.getNickname()), fd);
+	sendResponse(RPL_YOURHOST(client.getNickname(), _name, version), fd);
+	sendResponse(RPL_CREATED(client.getNickname(), "today"), fd);
+	sendResponse(RPL_MYINFO(client.getNickname(), _name, version, "itkol", "kl"), fd);
+	sendResponse(RPL_WELCOME(client.getNickname(), _name, client.getNickname()), fd);
 }

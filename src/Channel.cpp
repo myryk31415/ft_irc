@@ -23,37 +23,37 @@ Channel::~Channel()
 
 void Channel::addUser(Client &client)
 {
-	if (_users.find(client.getNick()) != _users.end())
+	if (_users.find(client.getNickname()) != _users.end())
 		std::cerr << "User is already in channel";
-	_users[client.getNick()] = client;
-	systemMessage(client.getNick() + " has joined the channel");
+	_users[client.getNickname()] = client;
+	systemMessage(client.getNickname() + " has joined the channel");
 }
 
 void Channel::removeUser(Client &client)
 {
-	if (_users.find(client.getNick()) == _users.end())
+	if (_users.find(client.getNickname()) == _users.end())
 		throw std::runtime_error("User is not in channel");
-	_users.erase(client.getNick());
-	systemMessage(client.getNick() + " has left the channel");
-	if (_operators.find(client.getNick()) != _operators.end())
-		_operators.erase(client.getNick());
+	_users.erase(client.getNickname());
+	systemMessage(client.getNickname() + " has left the channel");
+	if (_operators.find(client.getNickname()) != _operators.end())
+		_operators.erase(client.getNickname());
 }
 
 void Channel::addOperator(Client &client)
 {
-	if (_operators.find(client.getNick()) != _operators.end())
-		{std::cerr << "Cannot make " + client.getNick() + " an operator: User is already an operator in this channel" << std::endl; return ;}
-	_operators[client.getNick()] = client;
+	if (_operators.find(client.getNickname()) != _operators.end())
+		{std::cerr << "Cannot make " + client.getNickname() + " an operator: User is already an operator in this channel" << std::endl; return ;}
+	_operators[client.getNickname()] = client;
 	client.receiveMsg("You are now an operator on " + _name);
 }
 
 void Channel::removeOperator(Client &client)
 {
-	if (_operators.find(client.getNick()) == _operators.end())
-		{std::cerr << "Cannot remove operator rights of " + client.getNick() + ": User is not an operator in this channel" << std::endl; return ;}
+	if (_operators.find(client.getNickname()) == _operators.end())
+		{std::cerr << "Cannot remove operator rights of " + client.getNickname() + ": User is not an operator in this channel" << std::endl; return ;}
 	if (_operators.size() == 1)
-		{std::cerr << "Cannot remove operator rights of " + client.getNick() + ": User is the last operator in channel" << std::endl; return ;} //sollen wir ?
-	_operators.erase(client.getNick());
+		{std::cerr << "Cannot remove operator rights of " + client.getNickname() + ": User is the last operator in channel" << std::endl; return ;} //sollen wir ?
+	_operators.erase(client.getNickname());
 	client.receiveMsg("You are no longer an operator on " + _name);
 }
 void Channel::setTopic(const std::pair<std::string, std::string> &topic)
@@ -69,7 +69,7 @@ const std::pair<std::string, std::string> &Channel::getTopic() const
 
 void Channel::inviteUser(Client &invitedClient, Client &inviter)
 {
-	_invitedUsers[invitedClient.getNick()] = invitedClient;
+	_invitedUsers[invitedClient.getNickname()] = invitedClient;
 }
 
 void Channel::setMode(int mode, std::string value, bool set)
@@ -88,7 +88,7 @@ bool Channel::isModeSet(int mode) const
 
 bool Channel::isUserInvited(Client &client) const
 {
-	if (_invitedUsers.find(client.getNick()) != _invitedUsers.end())
+	if (_invitedUsers.find(client.getNickname()) != _invitedUsers.end())
 		return true;
 	return false;
 }
@@ -102,12 +102,12 @@ void Channel::systemMessage(const std::string &message)
 
 void Channel::broadcastMessage(const std::string &message, Client &sender)
 {
-	std::string newMessage = "<" + sender.getNick() + "> " + message;
+	std::string newMessage = "<" + sender.getNickname() + "> " + message;
 	if (_users.size() == 1)
 		return ;
 	if (_users.size() == 2)
 	{
-		if (_users.begin()->second.getNick() != sender.getNick())
+		if (_users.begin()->second.getNickname() != sender.getNickname())
 			_users.begin()->second.receiveMsg(newMessage);
 		else
 			(++_users.begin())->second.receiveMsg(newMessage);
@@ -115,7 +115,7 @@ void Channel::broadcastMessage(const std::string &message, Client &sender)
 	}
 	for (auto it = _users.begin(); it != _users.end(); it++)
 	{
-		if (it->second.getNick() != sender.getNick())
+		if (it->second.getNickname() != sender.getNickname())
 			it->second.receiveMsg(newMessage);
 	}
 }
@@ -200,9 +200,9 @@ std::string Channel::getAllUsers() const
 			allUsers += " ";
 		else
 			first = false;
-		if (_operators.find(user.second.getNick()) != _operators.end())
+		if (_operators.find(user.second.getNickname()) != _operators.end())
 			allUsers += "@";
-		allUsers += user.second.getNick();
+		allUsers += user.second.getNickname();
 	}
 	return allUsers;
 }

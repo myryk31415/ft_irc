@@ -24,22 +24,22 @@ void Server::KICK(std::vector<std::string> cmd, int fd)
 	std::vector<std::string> usersToKick;
 	Client &sender = *getClient(fd);
 	if (cmd.size() < 2)
-		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNick(), (cmd.empty() ? "" : "KICK " + cmd[0])), fd); return ;}
+		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), (cmd.empty() ? "" : "KICK " + cmd[0])), fd); return ;}
 	std::string channel = cmd[0];
 	std::string reason = splitCmdKick(cmd, channel, usersToKick);
 	if (_channels.find(channel) != _channels.end())
 	{
 		Channel &curChannel = _channels[channel];
-		if (!curChannel.getUser(sender.getNick())) // check if sender is in channel
-			{sendResponse(ERR_NOTONCHANNEL(sender.getNick(), channel.substr(1)), fd); return ;}
-		if (!curChannel.getOperator(sender.getNick())) // check if sender has perms
-		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNick(), channel.substr(1)), fd); return ;}
+		if (!curChannel.getUser(sender.getNickname())) // check if sender is in channel
+			{sendResponse(ERR_NOTONCHANNEL(sender.getNickname(), channel.substr(1)), fd); return ;}
+		if (!curChannel.getOperator(sender.getNickname())) // check if sender has perms
+		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNickname(), channel.substr(1)), fd); return ;}
 		for (auto it = usersToKick.begin(); it != usersToKick.end(); it++) // Iterate through all users to kick
 		{
 				if (!curChannel.getUser(*it)) // check if user to kick is in channel
-					{sendResponse(ERR_USERNOTINCHANNEL(sender.getNick(), *it, channel.substr(1)), fd); continue;}
+					{sendResponse(ERR_USERNOTINCHANNEL(sender.getNickname(), *it, channel.substr(1)), fd); continue;}
 				std::stringstream ss;
-				ss << ":" << sender.getNick() << "!" << curChannel.getUser(*it)->getUsername() << "@" << "localhost" << " KICK #" << curChannel.getName() << " " << curChannel.getUser(*it)->getNick() << " :" << reason;
+				ss << ":" << sender.getNickname() << "!" << curChannel.getUser(*it)->getUsername() << "@" << "localhost" << " KICK #" << curChannel.getName() << " " << curChannel.getUser(*it)->getNickname() << " :" << reason;
 				curChannel.broadcastMessage(ss.str(), sender);
 				curChannel.removeUser(*curChannel.getUser(*it));
 				if (curChannel.getOperator(*it))
@@ -49,5 +49,5 @@ void Server::KICK(std::vector<std::string> cmd, int fd)
 		}
 	}
 	else
-		sendResponse(ERR_NOSUCHCHANNEL(sender.getNick(), channel.substr(1)), fd);
+		sendResponse(ERR_NOSUCHCHANNEL(sender.getNickname(), channel.substr(1)), fd);
 }
