@@ -54,7 +54,7 @@ class Server
 		void		leaveAllChannels(Client &sender);
 		void		parseCommand(const std::string command, int fd);
 		std::vector<std::string>	parseArgs(const std::string command_args, int fd);
-		// void		cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd);
+		void		cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd);
 
 		void	finishRegistration(int fd);
 		//Commands

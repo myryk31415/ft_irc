@@ -261,32 +261,27 @@ std::vector<std::string>	Server::parseArgs(const std::string command_args, int f
 		args.emplace_back(command_args.substr(colon + 1));
 	return args;
 }
-// #define CMD_PAIR(cmd) commands.push_back(std::make_pair(#cmd, cmd));
-// #define CMD_LIST(a, b, c, d, e, f, g, h) \
-// 	CMD_PAIR(a) \
-// 	CMD_PAIR(b) \
-// 	CMD_PAIR(c) \
-// 	CMD_PAIR(d) \
-// 	CMD_PAIR(e) \
-// 	CMD_PAIR(f) \
-// 	CMD_PAIR(g) \
-// 	CMD_PAIR(h)
+#define CMD_PAIR(cmd) commands.push_back(std::make_pair(#cmd, cmd));
 
-// void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd)
-// {
-// 	std::vector<std::pair<std::string, void (Server::*)(std::vector<std::string>, int)>>	commands;
-// 	CMD_LIST(MODE, b, c, d, e, f, g, h);
+void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd)
+{
+	std::vector<std::pair<std::string, void (Server::*)(std::vector<std::string>, int)>>	commands;
+	CMD_PAIR(MODE);
 
-// 	for (auto it = commands.begin(); it != commands.end(); it++)
-// 		if (!it->first.compare(cmd))
-// 			(this->*(it->second))(args, fd);
-// }
+	for (auto it = commands.begin(); it != commands.end(); it++)
+		if (!it->first.compare(cmd))
+			(this->*(it->second))(args, fd);
+}
 
 void	Server::finishRegistration(int fd)
 {
 	std::string	msg;
+	Client		client = _clients[fd];
 
-	sendResponse("RPL_WELCOME\r\n", fd);
+	msg.append(client.getUsername()).append(" :Welcome to the ").append(_name).append(", ").append(client.getNick()); //todo [!<user>@<host>]
+	sendResponse(msg, fd);
+	msg.clear();
+	msg.append(client.getUsername()).append(" :Your host is ").append(_name).append(", running version ").append("version");
 	sendResponse("RPL_YOURHOST\r\n", fd);
 	sendResponse("RPL_CREATED\r\n", fd);
 	sendResponse("RPL_MYINFO\r\n", fd);
