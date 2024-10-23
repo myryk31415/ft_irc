@@ -42,10 +42,10 @@ class Server
 		static void	signalHandler(int signal);
 		void		init();
 		void		setupServerSocket();
-		void		shutdown();
-		void		clearClient(int fd);
 		void		acceptClient();
 		void		finishRegistration(int fd);
+		void		shutdown();
+		void		clearClient(int fd);
 
 		// getter
 		Client*		getClient(int fd);
