@@ -24,3 +24,9 @@
 # define RPL_TOPICWHOTIME(nick, channel, senderTime) (": 333 " + nick + " " + channel + " " + senderTime + CRLF)
 # define RPL_NAMREPLY(nick, channel, allUsers) (": 353 " + nick + " = " + channel + " :" + allUsers + CRLF)
 # define RPL_ENDOFNAMES(nick, channel) (": 366 " + nick + " " + channel + " " + ":End of /NAMES list" + CRLF)
+//Registration
+# define RPL_WELCOME(client, networkname, nick) (": 001 " + client + " :Welcome to the " + networkname + ", " + nick + CRLF) //todo  !user@host
+# define RPL_YOURHOST(client, servername, version) (": 002 " + client + " :Your host is " + servername + ", running version " + version + CRLF)
+# define RPL_CREATED(client, datetime) (": 003 " + client + " :This server was created " + datetime + CRLF)
+# define RPL_MYINFO(client, servername, version, usermodes, channelmodes) (": 004 " + client + " " + servername + " " + version + " " + usermodes + " " + channelmodes + CRLF) //todo more stuff
+# define RPL_ISUPPORT(client, datetime) (": 005 " + CRLF)

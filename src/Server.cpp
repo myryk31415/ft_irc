@@ -276,12 +276,11 @@ void	Server::finishRegistration(int fd)
 {
 	std::string	msg;
 	Client		client = _clients[fd];
+	std::string version = "0.69";
 
-	msg.append(client.getUsername()).append(" :Welcome to the ").append(_name).append(", ").append(client.getNick()); //todo [!<user>@<host>]
-	sendResponse(msg, fd);
-	msg.clear();
-	msg.append(client.getUsername()).append(" :Your host is ").append(_name).append(", running version ").append("version");
-	sendResponse("RPL_YOURHOST\r\n", fd);
-	sendResponse("RPL_CREATED\r\n", fd);
-	sendResponse("RPL_MYINFO\r\n", fd);
+	sendResponse(RPL_WELCOME(client.getNick(), _name, client.getNick()), fd);
+	sendResponse(RPL_YOURHOST(client.getNick(), _name, version), fd);
+	sendResponse(RPL_CREATED(client.getNick(), "today"), fd);
+	sendResponse(RPL_MYINFO(client.getNick(), _name, version, "banana", "potato"), fd);
+	sendResponse(RPL_WELCOME(client.getNick(), _name, client.getNick()), fd);
 }
