@@ -72,9 +72,9 @@ void Server::operatorPriv(bool sign, Channel &channel, std::string &modeReport, 
 	std::string test = *argsIt;
 	if (test.empty())
 		{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNick(), "(o)"), fd); return ;}
-	if (_clients.find(*argsIt) == _clients.end())
+	if (!getClient(test))
 		{sendResponse(ERR_NOSUCHNICK(getClient(fd)->getNick() ,*argsIt), fd); return ;}
-	Client &user = _clients[*argsIt];
+	Client &user = *(getClient(test));
 	if (!channel.getUser(*argsIt))
 		{sendResponse(ERR_USERNOTINCHANNEL(getClient(fd)->getNick(), *argsIt, channel.getName()), fd); return ;}
 	if (sign)
