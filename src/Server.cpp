@@ -72,8 +72,8 @@ void	Server::shutdown()
 	std::cout << RED;
 	for (auto it = _clients.begin(); it != _clients.end(); it++)
 	{
-		std::cout << "Disconnecting client " << it->second.getFd() << std::endl;
-		close(it->second.getFd());
+		std::cout << "Disconnecting client " << it->first << std::endl;
+		close(it->first);
 	}
 	if (_server_socket_fd != -1)
 	{
@@ -124,7 +124,7 @@ void	Server::acceptClient()
 	client.setFd(client_fd);
 	client.setNick(inet_ntoa(addr.sin_addr));
 	client.setIpAddr(client.getNick());
-	_clients[client.getNick()] = client;
+	_clients[client_fd] = client;
 	_sockets.push_back(client_poll);
 
 	std::cout << GREEN << "Client " << client_fd << " connected" << RESET << std::endl;
@@ -178,11 +178,7 @@ void	Server::clearClient(int fd)
 			it = _sockets.erase(it);
 		else
 			it++;
-	for (auto it = _clients.begin(); it != _clients.end();)
-		if (it->second.getFd() == fd)
-			it = _clients.erase(it);
-		else
-			it++;
+	_clients.erase(fd);
 }
 
 template <typename... Args>
@@ -207,10 +203,14 @@ void Server::sendResponse(std::string message, int fd)
 
 Client*		Server::getClient(int fd)
 {
-	for (auto iter = _clients.begin(); iter != _clients.end(); iter++)
-		if ((*iter).second.getFd() == fd)
-			return & (*iter).second;
-	return NULL;
+	// naah
+	if (_clients.find(fd) == _clients.end())
+		return NULL;
+	return &_clients[fd];
+	// for (auto iter = _clients.begin(); iter != _clients.end(); iter++)
+	// 	if ((*iter).first == fd)
+	// 		return & (*iter).second;
+	// return NULL;
 }
 
 void	Server::parseCommand(const std::string command, int fd)

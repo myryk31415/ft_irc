@@ -17,6 +17,7 @@
 #include "Client.hpp"
 #include "Channel.hpp"
 #include "respond.hpp"
+
 class Server
 {
 	private:
@@ -24,7 +25,7 @@ class Server
 		int _port;
 		int _server_socket_fd;
 		std::vector<struct pollfd> _sockets;
-		std::unordered_map<std::string, Client> _clients;
+		std::unordered_map<int, Client> _clients;
 		std::unordered_map<std::string, Channel> _channels;
 		std::string			_name;
 	public:
