@@ -12,11 +12,15 @@
 # define ERR_UMODEUNKOWNFLAG(nick) (": 501 " + nick + " :Unknown MODE flag" + CRLF)
 # define ERR_INVALIDMODEPARAM(nick, target, mode, param, description) (": 696 " + nick + " " + target + " " + mode + " " + param + " :" + description + CRLF)
 # define ERR_USERONCHANNEL(nick, user_nick, channel) (": 443 " + nick + " " + user_nick + " #" + channel + " :is already on channel" + CRLF)
-
+# define ERR_BADCHANNELKEY(nick, channel) (": 475 " + nick + " " + channel + " :Cannot join channel (+k)" + CRLF)
+# define ERR_INVITEONLYCHAN(nick, channel) (": 473 " + nick + " " + channel + " :Cannot join channel (+i)" + CRLF)
+# define ERR_CHANNELISFULL(nick, channel) (": 471 " + nick + " " + channel + " :Cannot join channel (+l)" + CRLF)
 //Repliies
 # define RPL_CHANNELMODEIS(nick, channel, modes, mode_values) (": 324 " + nick + " #" + channel + " " + modes + " " + mode_values + CRLF)
-# define RPL_CHANGEDMODE(host, channel, modes, args) (":" + host + " MODE #" + channel + " " + modes + " " + args)
+# define RPL_CHANGEDMODE(host, channel, modes, args) (":" + host + " MODE #" + channel + " " + modes + " " + args+ CRLF)
 # define RPL_INVITING(nick, user_nick, channel) (": 341 "+ nick + " " + user_nick + " " + channel + CRLF)
 # define RPL_TOPIC(nick, channel, topic) (": 332 " + nick + " " + channel + " :" + topic + CRLF)
 # define RPL_NOTOPIC(nick, channel) (": 331 " + nick + " " +  channel + " :No topic is set"+ CRLF)
 # define RPL_TOPICWHOTIME(nick, channel, senderTime) (": 333 " + nick + " " + channel + " " + senderTime + CRLF)
+# define RPL_NAMREPLY(nick, channel, allUsers) (": 353 " + nick + " = " + channel + " :" + allUsers + CRLF)
+# define RPL_ENDOFNAMES(nick, channel) (": 366 " + nick + " " + channel + " " + ":End of /NAMES list" + CRLF)

@@ -18,8 +18,6 @@ void Channel::addUser(Client &client)
 {
 	if (_users.find(client.getNick()) != _users.end())
 		throw std::runtime_error("User is already in channel");
-	if (isModeSet(USER_LIMIT) && std::atoi(_modes[USER_LIMIT].second.c_str()) <= _users.size())
-		throw std::runtime_error("Channel is full");
 	_users[client.getNick()] = client;
 	systemMessage(client.getNick() + " has joined the channel");
 }
@@ -167,8 +165,37 @@ std::string Channel::getModesvalues() const
 	return modestring;
 }
 
+std::string Channel::getModeValue(int mode) const
+{
+	return _modes[mode].second;
+}
+
 
 int Channel::getUserCount() const
 {
 	return _users.size();
+}
+
+bool Channel::isChannelfull() const
+{
+	if (!isModeSet(USER_LIMIT))
+		return false;
+	return (_users.size() == std::atoi(getModeValue(USER_LIMIT).c_str()));
+}
+
+std::string Channel::getAllUsers() const
+{
+	std::string allUsers;
+	bool first = true;
+	for (const auto& user : _users)
+	{
+		if (!first)
+			allUsers += " ";
+		else
+			first = false;
+		if (_operators.find(user.second.getNick()) != _operators.end())
+			allUsers += "@";
+		allUsers += user.second.getNick();
+	}
+	return allUsers;
 }

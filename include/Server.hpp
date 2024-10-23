@@ -49,7 +49,7 @@ class Server
 		void		userLimit(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd);
 		void		channelKey(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd);
 		void		operatorPriv(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd);
-
+		void		leaveAllChannels(Client &sender)
 		void		parseCommand(const std::string command);
 		std::vector<std::string>	parseArgs(const std::string command_args);
 		
@@ -59,4 +59,5 @@ class Server
 		void	INVITE(std::vector<std::string> cmd, int fd);
 		void	TOPIC(std::vector<std::string> cmd, int fd);
 		void	PART(std::vector<std::string> cmd, int fd);
+		void	JOIN(std::vector<std::string> cmd, int fd);
 };
