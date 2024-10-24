@@ -96,6 +96,7 @@ void	Server::finishRegistration(int fd)
 	sendResponse(RPL_YOURHOST(client.getNickname(), _name, version), fd);
 	sendResponse(RPL_CREATED(client.getNickname(), "today"), fd);
 	sendResponse(RPL_MYINFO(client.getNickname(), _name, version, "itkol", "kl"), fd);
+	// sendResponse(RPL_ISUPPORT, fd);
 }
 
 void	Server::shutdown()
@@ -104,6 +105,7 @@ void	Server::shutdown()
 	for (auto it = _clients.begin(); it != _clients.end(); it++)
 	{
 		std::cout << "Disconnecting client " << it->first << std::endl;
+		sendResponse("ERROR :server shutdown", it->first);
 		close(it->first);
 	}
 	if (_server_socket_fd != -1)
