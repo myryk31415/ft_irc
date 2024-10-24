@@ -111,6 +111,7 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 	{
 		if ((cmd_upper != "PASS"))
 			sendResponse(ERR_NOTREGISTERED(_clients[fd].getNickname()), fd);
+			// sendResponse(ERR_PASSWDMISMATCH(std::string("atest")), fd);
 		else
 			PASS(args, fd);
 		return;
