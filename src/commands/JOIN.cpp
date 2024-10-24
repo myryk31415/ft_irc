@@ -51,6 +51,8 @@ void Server::JOIN(std::vector<std::string> cmd, int fd)
 			{sendResponse(ERR_INVITEONLYCHAN(sender.getNickname(), channelname), fd); continue;}
 		if (curChannel.isModeSet(USER_LIMIT) && curChannel.isChannelfull())
 			{sendResponse(ERR_CHANNELISFULL(sender.getNickname(), channelname), fd); continue;}
+		if (curChannel.getUser(sender.getNickname()))
+			{sendResponse(ERR_USERONCHANNEL(sender.getNickname(), sender.getNickname(), channelname), fd); return ;}
 		curChannel.addUser(sender);
 		if (curChannel.getUserCount() == 1)
 			curChannel.addOperator(sender);
