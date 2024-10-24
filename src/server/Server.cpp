@@ -3,9 +3,9 @@
 
 bool Server::_signal = false;
 
-Server::Server(int port) : _port(port) {}
+Server::Server(int port) : _port(port), _name("irc.andiarbeit.com") {}
 
-Server::Server(int port, std::string pass) : _port(port), _pass(pass) {}
+Server::Server(int port, std::string pass) : _port(port), _pass(pass), _name("irc.andiarbeit.com") {}
 
 Server::~Server() {}
 
