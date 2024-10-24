@@ -2,17 +2,17 @@
 
 bool Server::checkDuplicate(std::string nick)
 {
-	bool found = false;
 	for (auto &user : _clients)
 	{
-		found = (user.second.getNickname() == nick);
+		if (user.second.getNickname() == nick)
+			return true;
 	}
-	return found;
+	return false;
 }
 
 bool checkValidNick(std::string nick)
 {
-	std::regex pattern("^[a-zA-Z0-9{}\\[\\]\\\\|]+$");
+	std::regex pattern("^[a-zA-Z0-9{}\\$$\\$$\\\\|]+$");
 	return (std::regex_match(nick, pattern));
 }
 

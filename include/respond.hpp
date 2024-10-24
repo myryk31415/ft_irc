@@ -36,4 +36,4 @@
 # define ERR_BADCHANNELKEY(nick, channel) (":irc.andiarbeit.com 475 " + nick + " " + (channel[0] == '#' ? "" : "#") + channel + " :Cannot join channel (+k)")
 # define ERR_CHANOPRIVSNEEDED(nick, channel) (":irc.andiarbeit.com 482 " + nick + " " + (channel[0] == '#' ? "" : "#") + channel + " :You're not channel operator")
 # define ERR_UMODEUNKOWNFLAG(nick) (":irc.andiarbeit.com 501 " + nick + " :Unknown MODE flag")
-# define ERR_INVALIDMODEPARAM(nick, target, mode, param, description) (":irc.andiarbeit.com 696 " + nick + " " + target + " " + mode + " " + param + " :" + description)
+# define ERR_INVALIDMODEPARAM(nick, target, mode, param, description) (":irc.andiarbeit.com 696 " + nick + " " + (target[0] == '#' ? "" : "#") + target + " " + mode + " " + param + " :" + description)
