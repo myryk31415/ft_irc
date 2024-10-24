@@ -69,7 +69,7 @@ const std::pair<std::string, std::string> &Channel::getTopic() const
 
 void Channel::inviteUser(Client &invitedClient, Client &inviter)
 {
-	_invitedUsers[invitedClient.getNickname()] = invitedClient;
+	_invitedUsers.emplace(invitedClient.getNickname(), invitedClient);
 }
 
 void Channel::setMode(int mode, std::string value, bool set)
@@ -102,21 +102,20 @@ void Channel::systemMessage(const std::string &message)
 
 void Channel::broadcastMessage(const std::string &message, Client &sender)
 {
-	std::string newMessage = "<" + sender.getNickname() + "> " + message;
 	if (_users.size() == 1)
 		return ;
 	if (_users.size() == 2)
 	{
 		if (_users.begin()->second.getNickname() != sender.getNickname())
-			_users.begin()->second.receiveMsg(newMessage);
+			_users.begin()->second.receiveMsg(message);
 		else
-			(++_users.begin())->second.receiveMsg(newMessage);
+			(++_users.begin())->second.receiveMsg(message);
 		return ;
 	}
 	for (auto it = _users.begin(); it != _users.end(); it++)
 	{
 		if (it->second.getNickname() != sender.getNickname())
-			it->second.receiveMsg(newMessage);
+			it->second.receiveMsg(message);
 	}
 }
 

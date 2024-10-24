@@ -7,8 +7,8 @@ void Server::INVITE(std::vector<std::string> cmd, int fd)
 		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), (cmd.empty() ? "INVITE" : "INVITE " + cmd[0])), fd); return;}
 	std::string target = cmd[0];
 	std::string channelnick = cmd[1].substr(1);
-	if (_channels.find(channelnick) == _channels.end())
-		{sendResponse(ERR_NOSUCHCHANNEL(sender.getNickname(), channelnick), fd); return;}
+	if (cmd[1][0]!= '#' || _channels.find(channelnick) == _channels.end())
+		{sendResponse(ERR_NOSUCHCHANNEL(sender.getNickname(), cmd[1]), fd); return;}
 	Channel		&channel = _channels[channelnick];
 	if (!channel.getUser(sender.getNickname())) // check if sender is in channel
 		{sendResponse(ERR_NOTONCHANNEL(sender.getNickname(), channelnick), fd); return ;}
@@ -18,7 +18,7 @@ void Server::INVITE(std::vector<std::string> cmd, int fd)
 		{sendResponse(ERR_CHANOPRIVSNEEDED(sender.getNickname(), channelnick), fd); return ;}
 	if (channel.getUser(target))
 		{sendResponse(ERR_USERONCHANNEL(sender.getNickname(), target, channelnick), fd); return ;}
-	Client		&toInv = *(channel.getUser(target));
+	Client		&toInv = *(getClient(target));
 	if (!channel.isUserInvited(toInv))
 	{
 		channel.inviteUser(toInv, sender);
