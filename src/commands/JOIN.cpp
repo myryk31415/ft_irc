@@ -59,8 +59,8 @@ void Server::JOIN(std::vector<std::string> cmd, int fd)
 		curChannel.systemMessage(ss.str());
 		auto curTopic = curChannel.getTopic();
 		if (!curTopic.first.empty())
-			sendResponse(RPL_TOPIC(sender.getNickname(), *itChannels, curTopic.first) + "\r\n" + RPL_TOPICWHOTIME(sender.getNickname(), *itChannels, curTopic.second), fd);
-		sendResponse(RPL_NAMREPLY(sender.getNickname(), *itChannels, curChannel.getAllUsers()) + "\r\n" + RPL_ENDOFNAMES(sender.getNickname(), *itChannels), fd);
+			sendResponse(RPL_TOPIC(sender.getNickname(), channelname, curTopic.first) + "\r\n" + RPL_TOPICWHOTIME(sender.getNickname(), channelname, curTopic.second), fd);
+		sendResponse(RPL_NAMREPLY(sender.getNickname(), channelname, curChannel.getAllUsers()) + "\r\n" + RPL_ENDOFNAMES(sender.getNickname(), channelname), fd);
 		if (curChannel.isModeSet(KEY))
 			itKeys++;
 	}

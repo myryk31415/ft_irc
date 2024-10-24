@@ -50,7 +50,7 @@ void Server::channelKey(bool sign, Channel &channel, std::string &modeReport, st
 	{
 		std::string key = *argsIt;
 		if (key.empty())
-			{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNickname(), "(o)"), fd); return ;}
+			{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNickname(), "(k)"), fd); return ;}
 		if (key.find_first_of(" \t\v") != std::string::npos)
 			{sendResponse(ERR_INVALIDMODEPARAM(getClient(fd)->getNickname(), channel.getName(), "k", key, "Should be without Whitespaces"), fd); return ;}
 		channel.setMode(KEY, key, true);
@@ -92,7 +92,7 @@ void Server::userLimit(bool sign, Channel &channel, std::string &modeReport, std
 	{
 		std::string limit = *argsIt;
 		if (limit.empty())
-			{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNickname(), "(o)"), fd); return ;}
+			{sendResponse(ERR_NEEDMOREPARAMS(getClient(fd)->getNickname(), "(l)"), fd); return ;}
 		if (limit.find_first_not_of("0123456789") != std::string::npos || std::atoi(limit.c_str()) <= 0)
 			{sendResponse(ERR_INVALIDMODEPARAM(getClient(fd)->getNickname(), channel.getName(), "i", limit, "Should be a Int Number"), fd); return ;}
 		channel.setMode(USER_LIMIT, limit, true);
