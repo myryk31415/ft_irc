@@ -118,6 +118,7 @@ void	Server::shutdown()
 
 void	Server::clearClient(int fd)
 {
+	std::cout << "Disconnecting client " << fd << std::endl;
 	close(fd);
 	for (auto it = _sockets.begin(); it != _sockets.end();)
 		if (it->fd == fd)
