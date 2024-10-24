@@ -107,6 +107,7 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 	std::string cmd_upper = cmd;
 
 	transform(cmd.begin(), cmd.end(), cmd_upper.begin(), toupper);
+	CAP(fd);
 	if (client.getAuth() == 2)
 	{
 		if ((cmd_upper != "PASS"))

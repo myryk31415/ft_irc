@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-void	Server::CAP(std::vector<std::string> cmd, int fd)
+void	Server::CAP(int fd)
 {
 	sendResponse("CAP * LS :", fd);
 	// if (!cmd[0].compare("CAP LS 302"))
