@@ -4,7 +4,7 @@
 # define RPL_YOURHOST(client, servername, version) (":002 " + client + " :Your host is " + servername + ", running version " + version)
 # define RPL_CREATED(client, datetime) (":003 " + client + " :This server was created " + datetime)
 # define RPL_MYINFO(client, servername, version, usermodes, channelmodes) (":004 " + client + " " + servername + " " + version + " " + usermodes + " " + channelmodes) //todo more stuff
-# define RPL_ISUPPORT(client, datetime) (":005 ")
+# define RPL_ISUPPORT() (":005 ")
 
 // Replies
 # define RPL_CHANGEDMODE(nick, host, channel, modes, args) (":" + nick + "!" + host + "@localhost MODE " + (channel[0] == '#' ? "" : "#") + channel + " " + modes + " " + args)

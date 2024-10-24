@@ -96,7 +96,7 @@ void	Server::finishRegistration(int fd)
 	sendResponse(RPL_YOURHOST(client.getNickname(), _name, version), fd);
 	sendResponse(RPL_CREATED(client.getNickname(), "today"), fd);
 	sendResponse(RPL_MYINFO(client.getNickname(), _name, version, "itkol", "kl"), fd);
-	// sendResponse(RPL_ISUPPORT, fd);
+	sendResponse(RPL_ISUPPORT(), fd);
 }
 
 void	Server::shutdown()
