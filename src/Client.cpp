@@ -51,7 +51,7 @@ const std::string& Client::getRealname(void) const
 
 void	Client::setRealname(const std::string &new_realname)
 {
-	_username = new_realname;
+	_realname = new_realname;
 }
 
 int		Client::getAuth() const
