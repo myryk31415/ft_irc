@@ -7,7 +7,7 @@
 # define RPL_ISUPPORT() (":irc.andiarbeit.com 005 ")
 
 // Replies
-# define RPL_CHANGEDMODE(nick, host, channel, modes, args) (":irc.andiarbeit.com " + nick + "!" + host + "@localhost MODE " + (channel[0] == '#' ? "" : "#") + channel + " " + modes + " " + args)
+# define RPL_CHANGEDMODE(nick, host, channel, modes, args) (":" + nick + "!" + host + "@localhost MODE  " + (channel[0] == '#' ? "" : "#") + channel + " " + modes + " " + args)
 # define RPL_CHANNELMODEIS(nick, channel, modes, mode_values) (":irc.andiarbeit.com 324 " + nick + " " + (channel[0] == '#' ? "" : "#") + channel + " " + modes + " " + mode_values)
 # define RPL_NOTOPIC(nick, channel) (":irc.andiarbeit.com 331 " + nick + " " + (channel[0] == '#' ? "" : "#") + channel + " :No topic is set")
 # define RPL_TOPIC(nick, channel, topic) (":irc.andiarbeit.com 332 " + nick + " " + (channel[0] == '#' ? "" : "#") + channel + " :" + topic)
@@ -25,8 +25,8 @@
 # define ERR_ERRONEUSNICKNAME(nick, falseNick) (":irc.andiarbeit.com 432 " + nick + " " + falseNick + " :Erroneus nickname")
 # define ERR_NICKNAMEINUSE(nick, falseNick) (":irc.andiarbeit.com 433 " + nick + " " + falseNick + " :Nickname already in use")
 # define ERR_USERNOTINCHANNEL(nick, user_nick, channel) (":irc.andiarbeit.com 441 " + nick + " " + user_nick + " " + (channel[0] == '#' ? "" : "#") + channel + " :They aren't on that channel")
-# define ERR_NOTONCHANNEL(nick, channel) (":irc.andiarbeit.com 442 " + nick + " " + (channel[0] == '#' ? "" : "#") + channel + " :You're not on that channel")
-# define ERR_USERONCHANNEL(nick, user_nick, channel) (":irc.andiarbeit.com 443 " + nick + " " + user_nick + " " + (channel[0] == '#' ? "" : "#") + channel + " :is already on channel")
+# define ERR_NOTONCHANNEL(nick, channel) (":irc.andiarbeit.com 442 " + nick + "  #" + channel + " :You're not on that channel")
+# define ERR_USERONCHANNEL(nick, user_nick, channel) (":irc.andiarbeit.com 443 " + nick + " " + user_nick + "  " + (channel[0] == '#' ? "" : "#") + channel + " :is already on channel")
 # define ERR_NOTREGISTERED(client) (":irc.andiarbeit.com 451 " + client + " :You have not registered")
 # define ERR_NEEDMOREPARAMS(nick, cmd) (":irc.andiarbeit.com 461 " + nick + " " + cmd + " :Not enough parameters")
 # define ERR_ALREADYREGISTERED(client) (":irc.andiarbeit.com 462 " + client + " :You may not reregister")

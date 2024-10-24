@@ -49,10 +49,6 @@ void Channel::addOperator(Client &client)
 
 void Channel::removeOperator(Client &client)
 {
-	if (_operators.find(client.getNickname()) == _operators.end())
-		{std::cerr << "Cannot remove operator rights of " + client.getNickname() + ": User is not an operator in this channel" << std::endl; return ;}
-	if (_operators.size() == 1)
-		{std::cerr << "Cannot remove operator rights of " + client.getNickname() + ": User is the last operator in channel" << std::endl; return ;} //sollen wir ?
 	_operators.erase(client.getNickname());
 	client.receiveMsg("You are no longer an operator on " + _name);
 }
