@@ -5,7 +5,7 @@ void	Server::PRIVMSG(std::vector<std::string> cmd, int fd)
 	Client &sender = _clients[fd];
 	if (cmd.empty() || cmd[0].empty())
 		{sendResponse(ERR_NORECIPIENT(sender.getNickname()), fd); return ;}
-	if (cmd.size() < 2)
+	if (cmd.size() < 2 || cmd[1].empty())
 		{sendResponse(ERR_NOTEXTTOSEND(sender.getNickname()), fd); return ;}
 	std::vector<std::string> targetsToSend;
 	splitComma(cmd[0], targetsToSend);
