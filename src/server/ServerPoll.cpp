@@ -141,6 +141,7 @@ void	Server::cmdDecide(const std::string cmd, const std::vector<std::string> arg
 	CMD_PAIR(USER);
 	CMD_PAIR(NICK);
 	CMD_PAIR(PRIVMSG);
+	CMD_PAIR(QUIT);
 	for (auto it = commands.begin(); it != commands.end(); it++)
 	{
 		if (!it->first.compare(cmd_upper))

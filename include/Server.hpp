@@ -66,7 +66,7 @@ class Server
 		void		userLimit(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd);
 		void		channelKey(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd);
 		void		operatorPriv(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd);
-
+		void		systemMessage(const std::string &message);
 
 		// Commands
 		void	KICK(std::vector<std::string> cmd, int fd);
@@ -82,6 +82,7 @@ class Server
 		void	PASS(std::vector<std::string> cmd, int fd);
 		void	PRIVMSG(std::vector<std::string> cmd, int fd);
 		void	CAP(std::vector<std::string> cmd, int fd);
+		void	QUIT(std::vector<std::string> cmd, int fd);
 };
 
 void splitComma(std::string &cmd, std::vector<std::string> &split);

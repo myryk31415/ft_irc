@@ -53,3 +53,10 @@ void splitComma(std::string &cmd, std::vector<std::string> &split)
 		if (!line.empty())
 			split.push_back(line);
 }
+
+void Server::systemMessage(const std::string &message)
+{
+	std::for_each(_clients.begin(), _clients.end(), [message](auto pair) {
+		pair.second.receiveMsg(message);
+	});
+}
