@@ -76,6 +76,7 @@ void	Client::leaveChannel(Channel *channel)
 
 void	Client::receiveMsg(const std::string &msg)
 {
-	if (send(_fd, msg.c_str(), msg.size(), 0) == -1)
+	std::string out = msg + "\r\n";
+	if (send(_fd, out.c_str(), out.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }

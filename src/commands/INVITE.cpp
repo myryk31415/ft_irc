@@ -23,6 +23,6 @@ void Server::INVITE(std::vector<std::string> cmd, int fd)
 	{
 		channel.inviteUser(toInv, sender);
 		sendResponse(RPL_INVITING(sender.getNickname(), target, channelnick), fd);
-		toInv.receiveMsg(": " + sender.getUsername() + " INVITE " + target + " #" + channelnick);
+		toInv.receiveMsg(":" + sender.getNickname() + "!" + sender.getUsername() + "@localhost INVITE " + target + " #" + channelnick);
 	}
 }

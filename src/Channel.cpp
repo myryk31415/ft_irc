@@ -42,9 +42,9 @@ void Channel::removeUser(Client &client)
 void Channel::addOperator(Client &client)
 {
 	if (_operators.find(client.getNickname()) != _operators.end())
-		{std::cerr << "Cannot make " + client.getNickname() + " an operator: User is already an operator in this channel" << std::endl; return ;}
+		{std::cerr << "Cannot make " + client.getNickname() + " an operator: User is already an operator in this channel \r\n"; return ;}
 	_operators[client.getNickname()] = client;
-	client.receiveMsg("You are now an operator on " + _name);
+	client.receiveMsg("You are now an operator on #" + _name);
 }
 
 void Channel::removeOperator(Client &client)

@@ -25,7 +25,8 @@ void Server::sendError(std::string numeric, int fd, std::string client, Args... 
 
 void Server::sendResponse(std::string message, int fd)
 {
-	if (send(fd, message.c_str(), message.size(), 0) == -1)
+	std::string out = message + "\r\n";
+	if (send(fd, out.c_str(), out.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
 }
 

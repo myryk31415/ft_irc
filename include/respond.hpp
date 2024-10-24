@@ -1,6 +1,6 @@
 #pragma once
 
-# define CRLF "\r\n"
+# define CRLF ""
 
 // Registration
 # define RPL_WELCOME(client, networkname, nick) (": 001 " + client + " :Welcome to the " + networkname + ", " + nick + CRLF) //todo  !user@host
@@ -10,7 +10,7 @@
 # define RPL_ISUPPORT(client, datetime) (": 005 " + CRLF)
 
 // Replies
-# define RPL_CHANGEDMODE(host, channel, modes, args) (":" + host + " MODE #" + channel + " " + modes + " " + args+ CRLF)
+# define RPL_CHANGEDMODE(nick, host, channel, modes, args) (":" + nick + "!" + host + "@localhost MODE #" + channel + " " + modes + " " + args + CRLF)
 # define RPL_CHANNELMODEIS(nick, channel, modes, mode_values) (": 324 " + nick + " #" + channel + " " + modes + " " + mode_values + CRLF)
 # define RPL_NOTOPIC(nick, channel) (": 331 " + nick + " " +  channel + " :No topic is set"+ CRLF)
 # define RPL_TOPIC(nick, channel, topic) (": 332 " + nick + " " + channel + " :" + topic + CRLF)

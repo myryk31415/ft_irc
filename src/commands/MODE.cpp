@@ -147,5 +147,5 @@ void Server::MODE(std::vector<std::string> cmd, int fd)
 		else
 			sendResponse(ERR_UMODEUNKOWNFLAG(sender.getNickname()), fd);
 	}
-	channel.systemMessage(RPL_CHANGEDMODE(sender.getUsername(), channel.getName(), modeReport, argsReport));
+	channel.systemMessage(RPL_CHANGEDMODE(sender.getNickname(), sender.getUsername(), channel.getName(), modeReport, argsReport));
 }
