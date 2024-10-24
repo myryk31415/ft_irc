@@ -9,7 +9,7 @@
 // Replies
 # define RPL_CHANGEDMODE(nick, host, channel, modes, args) (":" + nick + "!" + host + "@localhost MODE " + (channel[0] == '#' ? "" : "#") + channel + " " + modes + " " + args)
 # define RPL_CHANNELMODEIS(nick, channel, modes, mode_values) (":324 " + nick + " " + (channel[0] == '#' ? "" : "#") + channel + " " + modes + " " + mode_values)
-# define RPL_NOTOPIC(nick, channel) (":331 " + nick + " " +  channel + " :No topic is set)
+# define RPL_NOTOPIC(nick, channel) (":331 " + nick + " " + (channel[0] == '#' ? "" : "#") + channel + " :No topic is set")
 # define RPL_TOPIC(nick, channel, topic) (":332 " + nick + " " + (channel[0] == '#' ? "" : "#") + channel + " :" + topic)
 # define RPL_TOPICWHOTIME(nick, channel, senderTime) (":333 " + nick + " " + (channel[0] == '#' ? "" : "#") + channel + " " + senderTime)
 # define RPL_INVITING(nick, user_nick, channel) (":341 "+ nick + " " + user_nick + " " + (channel[0] == '#' ? "" : "#") + channel)
