@@ -3,7 +3,7 @@
 # define RPL_WELCOME(client, networkname, nick) (":irc.andiarbeit.com 001 " + client + " :Welcome to the " + networkname + ", " + nick) //todo  !user@host
 # define RPL_YOURHOST(client, servername, version) (":irc.andiarbeit.com 002 " + client + " :Your host is " + servername + ", running version " + version)
 # define RPL_CREATED(client, datetime) (":irc.andiarbeit.com 003 " + client + " :This server was created " + datetime)
-# define RPL_MYINFO(client, servername, version, usermodes, channelmodes) (":irc.andiarbeit.com 004 " + client + " " + servername + " " + version + " " + usermodes + " " + channelmodes) //todo more stuff
+# define RPL_MYINFO(client, servername, version, usermodes, channelmodes, channelmodesArgs) (":irc.andiarbeit.com 004 " + client + " " + servername + " " + version + " " + usermodes + " " + channelmodes + " " + channelmodesArgs) //todo more stuff
 # define RPL_ISUPPORT() (":irc.andiarbeit.com 005 ")
 
 // Replies
