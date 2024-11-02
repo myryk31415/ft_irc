@@ -1,32 +1,17 @@
 # include "Server.hpp"
 
-
-std::string splitCmdPart(std::vector<std::string>& cmd, std::vector<std::string>& channelsToPart)
-{
-	size_t pos;
-	size_t comma_pos;
-	std::string reason;
-	std::string args = cmd[0];
-	while ((comma_pos = args.find(',')) != std::string::npos)
-	{
-		channelsToPart.push_back(args.substr(0, comma_pos));
-		args = args.substr(comma_pos + 1);
-	}
-	pos = args.find(' ');
-	channelsToPart.push_back(args.substr(0, pos));
-	reason = cmd[1];
-	if (reason.empty())
-		reason = "Gotta gooo bye bye";
-	return reason;
-}
-
 void Server::PART(std::vector<std::string> cmd, int fd)
 {
 	std::vector<std::string> channelsToPart;
 	Client &sender = *getClient(fd);
 	if (cmd.size() < 1)
 		{sendResponse(ERR_NEEDMOREPARAMS(sender.getNickname(), (cmd.empty() ? "PART" : "PART " + cmd[0])), fd); return ;}
-	std::string reason = splitCmdPart(cmd, channelsToPart);
+	splitComma(cmd[0], channelsToPart);
+	std::string reason;
+	if (cmd.size() >= 2)
+		reason = cmd[1];
+	if (reason.empty())
+		reason = "Gotta gooo bye bye";
 
 	for (auto it = channelsToPart.begin(); it != channelsToPart.end(); it++)
 	{

@@ -63,9 +63,9 @@ class Server
 		template <typename... Args>
 		void		sendError(std::string numeric, int fd, std::string client, Args... args);
 		void		sendResponse(std::string message, int fd);
-		bool		userLimit(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd);
-		bool		channelKey(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd);
-		bool		operatorPriv(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator args_it, std::string &argsReport, int fd);
+		bool		userLimit(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator &argsIt, std::string &argsReport, int fd);
+		bool		channelKey(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator &argsIt, std::string &argsReport, int fd);
+		bool		operatorPriv(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator &args_it, std::string &argsReport, int fd);
 		void		systemMessage(const std::string &message);
 
 		// Commands

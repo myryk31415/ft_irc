@@ -44,7 +44,7 @@ void topicRestrict(bool sign, Channel &channel, std::string &modeReport)
 	addMode(modeReport, 't', sign);
 }
 
-bool Server::channelKey(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd)
+bool Server::channelKey(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator &argsIt, std::string &argsReport, int fd)
 {
 	if (sign)
 	{
@@ -54,8 +54,10 @@ bool Server::channelKey(bool sign, Channel &channel, std::string &modeReport, st
 		if (key.find_first_of(" \t\v") != std::string::npos)
 			{sendResponse(ERR_INVALIDMODEPARAM(getClient(fd)->getNickname(), channel.getName(), "k", key, "Should be without Whitespaces"), fd); return false;}
 		channel.setMode(KEY, key, true);
+		if (!argsReport.empty())
+			argsReport += " ";
 		argsReport += *argsIt;
-		argsIt++;
+		argsIt++;	
 		addMode(modeReport, 'k', sign);
 	}
 	else
@@ -67,7 +69,7 @@ bool Server::channelKey(bool sign, Channel &channel, std::string &modeReport, st
 		return true;
 }
 
-bool Server::operatorPriv(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd)
+bool Server::operatorPriv(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator &argsIt, std::string &argsReport, int fd)
 {
 	std::string test = *argsIt;
 	if (test.empty())
@@ -81,13 +83,15 @@ bool Server::operatorPriv(bool sign, Channel &channel, std::string &modeReport, 
 		channel.addOperator(user);
 	else
 		channel.removeOperator(user);
+	if (!argsReport.empty())
+		argsReport += " ";
 	argsReport += *argsIt;
 	argsIt++;
 	addMode(modeReport, 'o', sign);
 		return true;
 }
 
-bool Server::userLimit(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator argsIt, std::string &argsReport, int fd)
+bool Server::userLimit(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator &argsIt, std::string &argsReport, int fd)
 {
 	if (sign)
 	{
@@ -97,6 +101,8 @@ bool Server::userLimit(bool sign, Channel &channel, std::string &modeReport, std
 		if (limit.find_first_not_of("0123456789") != std::string::npos || std::atoi(limit.c_str()) <= 0)
 			{sendResponse(ERR_INVALIDMODEPARAM(getClient(fd)->getNickname(), channel.getName(), "i", limit, "Should be a Int Number"), fd); return false;}
 		channel.setMode(USER_LIMIT, limit, true);
+		if (!argsReport.empty())
+			argsReport += " ";
 		argsReport += *argsIt;
 		argsIt++;
 	}
@@ -152,5 +158,6 @@ void Server::MODE(std::vector<std::string> cmd, int fd)
 		if (!test)
 			return ;
 	}
+
 	channel.systemMessage(RPL_CHANGEDMODE(sender.getNickname(), sender.getUsername(), channel.getName(), modeReport, argsReport));
 }
