@@ -9,25 +9,10 @@ Server::Server(int port, std::string pass) : _port(port), _pass(pass), _name("ir
 
 Server::~Server() {}
 
-template <typename... Args>
-void Server::sendError(std::string numeric, int fd, std::string client, Args... args) // Pls write : infront of the msg
-{
-	std::stringstream ss;
-
-	ss << ":" << _name << " " << numeric;
-
-	((ss << args << " "), ...);
-	ss <<"\r\n";
-	std::string out = ss.str();
-	if (send(fd, out.c_str(), out.size(), 0) == -1)
-		std::cerr << "send() failed" << std::endl;
-}
-
 void Server::sendResponse(std::string message, int fd)
 {
-	std::string out = message + "\r\n";
-	if (send(fd, out.c_str(), out.size(), 0) == -1)
-		std::cerr << "send() failed" << std::endl;
+	Client &reciever = *(getClient(fd));
+	reciever.receiveMsg(message);
 }
 
 Client*	Server::getClient(int fd)

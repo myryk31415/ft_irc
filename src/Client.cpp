@@ -76,7 +76,15 @@ void	Client::leaveChannel(Channel *channel)
 
 void	Client::receiveMsg(const std::string &msg)
 {
-	std::string out = msg + "\r\n";
-	if (send(_fd, out.c_str(), out.size(), 0) == -1)
-		std::cerr << "send() failed" << std::endl;
+	_signalBuffer += msg + "\r\n";
+}
+
+std::string	Client::getBuffer() const
+{
+	return _signalBuffer;
+}
+
+void	Client::setBuffer(std::string msg)
+{
+	_signalBuffer == msg;
 }

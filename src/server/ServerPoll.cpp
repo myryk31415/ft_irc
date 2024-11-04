@@ -15,9 +15,22 @@ void	Server::poll()
 				else
 					receiveData(_sockets[i].fd);
 			}
+			else if (_sockets[i].revents & POLLOUT)
+				sendData(_sockets[i].fd);
 		}
 	}
 	shutdown();
+}
+
+void	Server::sendData(int fd)
+{
+	Client &reciever = *(getClient(fd));
+	const std::string &out = reciever.getBuffer();
+	if (!out.empty());
+	{
+		if (send(fd, out.c_str(), out.size(), 0) == -1)
+		std::cerr << "send() failed" << std::endl;
+	}
 }
 
 void splitData(std::string data, std::vector<std::string> &cmd)

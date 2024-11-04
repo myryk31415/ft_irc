@@ -57,11 +57,8 @@ class Server
 		void						parseCommand(const std::string command, int fd);
 		std::vector<std::string>	parseArgs(const std::string command_args, int fd);
 		void						cmdDecide(const std::string cmd, const std::vector<std::string> args, int fd);
+		void						sendData(int fd);
 
-		// void		sendError(std::string numeric, std::string client, std::string msg, int fd);
-		// void		sendError(std::string numeric, std::string client, std::string channel, std::string msg, int fd);
-		template <typename... Args>
-		void		sendError(std::string numeric, int fd, std::string client, Args... args);
 		void		sendResponse(std::string message, int fd);
 		bool		userLimit(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator &argsIt, std::string &argsReport, int fd);
 		bool		channelKey(bool sign, Channel &channel, std::string &modeReport, std::vector<std::string>::iterator &argsIt, std::string &argsReport, int fd);
