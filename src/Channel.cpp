@@ -25,7 +25,7 @@ void Channel::addUser(Client &client)
 {
 	if (_users.find(client.getNickname()) != _users.end())
 		std::cerr << "User is already in channel";
-	_users[client.getNickname()] = client;
+	_users[client.getNickname()] = &client;
 	systemMessage(client.getNickname() + " has joined the channel");
 }
 
@@ -96,7 +96,8 @@ void Channel::systemMessage(const std::string &message)
 	// });
 	for (auto it = _users.begin(); it != _users.end(); it++)
 	{
-		Client &reciever = *(getUser(it->first));
+		Client *reciever = getUser(it->first);
+		reciever->receiveMsg(message);
 	}
 }
 
@@ -106,18 +107,18 @@ void Channel::broadcastMessage(const std::string &message, Client &sender)
 		return ;
 	if (_users.size() == 2)
 	{
-		if (_users.begin()->second.getNickname() != sender.getNickname())
-			_users.begin()->second.receiveMsg(message);
+		if (_users.begin()->second->getNickname() != sender.getNickname())
+			_users.begin()->second->receiveMsg(message);
 		else
-			(++_users.begin())->second.receiveMsg(message);
+			(++_users.begin())->second->receiveMsg(message);
 		return ;
 	}
 	for (auto it = _users.begin(); it != _users.end(); it++)
 	{
-		Client &reciever = *(getUser(it->first));
-		reciever.receiveMsg(message);
-		if (reciever.getNickname() != sender.getNickname())
-			reciever.receiveMsg(message);
+		Client *reciever = getUser(it->first);
+		reciever->receiveMsg(message);
+		if (reciever->getNickname() != sender.getNickname())
+			reciever->receiveMsg(message);
 	}
 }
 
@@ -131,7 +132,7 @@ Client *Channel::getUser(std::string user)
 	auto it = _users.find(user);
 	if (it == _users.end())
 		return NULL;
-	return (&it->second);
+	return (it->second);
 }
 
 Client *Channel::getOperator(std::string operatr)
@@ -201,9 +202,9 @@ std::string Channel::getAllUsers() const
 			allUsers += " ";
 		else
 			first = false;
-		if (_operators.find(user.second.getNickname()) != _operators.end())
+		if (_operators.find(user.second->getNickname()) != _operators.end())
 			allUsers += "@";
-		allUsers += user.second.getNickname();
+		allUsers += user.second->getNickname();
 	}
 	return allUsers;
 }

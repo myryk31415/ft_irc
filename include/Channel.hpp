@@ -23,7 +23,7 @@ class Channel
 	private:
 		std::string _name;
 		std::pair<std::string, std::string> _topic;
-		std::unordered_map<std::string, Client > _users;
+		std::unordered_map<std::string, Client *> _users;
 		std::unordered_map<std::string, Client > _operators;
 		std::unordered_map<std::string, Client > _invitedUsers;
 		std::vector<std::pair<bool, std::string> > _modes;
