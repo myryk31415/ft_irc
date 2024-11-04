@@ -1,7 +1,7 @@
 
 #include "Client.hpp"
 
-Client::Client()
+Client::Client() : _signalBuffer("")
 {
 }
 
@@ -86,5 +86,5 @@ std::string	Client::getBuffer() const
 
 void	Client::setBuffer(std::string msg)
 {
-	_signalBuffer == msg;
+	_signalBuffer = msg;
 }

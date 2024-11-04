@@ -75,7 +75,7 @@ void	Server::acceptClient()
 
 	pollfd	client_poll;
 	client_poll.fd = client_fd;
-	client_poll.events = POLLIN;
+	client_poll.events = POLLIN | POLLOUT | POLLHUP;
 	client_poll.revents = 0;
 
 	client.setFd(client_fd);

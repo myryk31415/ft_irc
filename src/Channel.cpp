@@ -91,9 +91,13 @@ bool Channel::isUserInvited(Client &client) const
 
 void Channel::systemMessage(const std::string &message)
 {
-	std::for_each(_users.begin(), _users.end(), [message](auto pair) {
-		pair.second.receiveMsg(message);
-	});
+	// std::for_each(_users.begin(), _users.end(), [message](std::pair<std::string, Client > pair) {
+	// 	pair.second.receiveMsg(message);
+	// });
+	for (auto it = _users.begin(); it != _users.end(); it++)
+	{
+		Client &reciever = *(getUser(it->first));
+	}
 }
 
 void Channel::broadcastMessage(const std::string &message, Client &sender)
@@ -110,8 +114,10 @@ void Channel::broadcastMessage(const std::string &message, Client &sender)
 	}
 	for (auto it = _users.begin(); it != _users.end(); it++)
 	{
-		if (it->second.getNickname() != sender.getNickname())
-			it->second.receiveMsg(message);
+		Client &reciever = *(getUser(it->first));
+		reciever.receiveMsg(message);
+		if (reciever.getNickname() != sender.getNickname())
+			reciever.receiveMsg(message);
 	}
 }
 

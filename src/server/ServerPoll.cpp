@@ -15,8 +15,10 @@ void	Server::poll()
 				else
 					receiveData(_sockets[i].fd);
 			}
-			else if (_sockets[i].revents & POLLOUT)
+			if (_sockets[i].revents & POLLOUT)
 				sendData(_sockets[i].fd);
+			if (_sockets[i].revents & POLLHUP)
+				close(_sockets[i].fd);
 		}
 	}
 	shutdown();
@@ -24,12 +26,15 @@ void	Server::poll()
 
 void	Server::sendData(int fd)
 {
+	if (!getClient(fd))
+		return ;
 	Client &reciever = *(getClient(fd));
 	const std::string &out = reciever.getBuffer();
-	if (!out.empty());
+	if (!out.empty())
 	{
 		if (send(fd, out.c_str(), out.size(), 0) == -1)
 		std::cerr << "send() failed" << std::endl;
+		reciever.setBuffer("");
 	}
 }
 
