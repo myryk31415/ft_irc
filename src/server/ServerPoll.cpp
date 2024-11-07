@@ -40,14 +40,16 @@ void	Server::sendData(int fd)
 
 void splitData(std::string data, std::vector<std::string> &cmd)
 {
-	std::istringstream	strm(data);
-	std::string			line;
-	while (std::getline(strm, line))
+	static std::string	str("");
+
+	str.append(data);
+	while (!str.empty())
 	{
-		size_t pos = line.find_first_of("\r\n");
-		if(pos != std::string::npos)
-			line = line.substr(0, pos);
-		cmd.push_back(line);
+		size_t pos = str.find_first_of("\n");
+		if (pos == std::string::npos)
+			return;
+		cmd.push_back(str.substr(0, pos));
+		str.erase(0, pos + 1);
 	}
 }
 
